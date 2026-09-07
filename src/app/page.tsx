@@ -1,24 +1,58 @@
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import Link from "next/link";
-import { ArrowRight, Landmark, FileText, Scale, BookOpen, CalendarHeart, Compass, Search, Users, UserCog, UserCheck, History, Book, Image as ImageIcon, Library } from "lucide-react";
+import {
+  ArrowRight,
+  Landmark,
+  FileText,
+  Scale,
+  BookOpen,
+  CalendarHeart,
+  Compass,
+  Search,
+  Users,
+  UserCog,
+  UserCheck,
+  History,
+  Book,
+  Image as ImageIcon,
+  Library,
+  Calendar,
+  Clock,
+  Sparkles,
+  ArrowUpRight,
+  Camera,
+} from "lucide-react";
 import { getFeaturedMuseums } from "@/lib/museums";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { MuseumAccordionMobile } from "@/components/museum/MuseumAccordionMobile";
 import { MuseumGrid } from "@/components/museum/MuseumGrid";
 import { Button } from "@/components/ui/Button";
-import { getAcervoPhotos, getLatestEventEdition, getEventPhotos, getPhotoUrl } from "@/lib/memoria";
+import { OlharMuseuService } from "@/lib/olharMuseuService";
 
 export const revalidate = 60;
+
+function formatPubDate(dateStr?: string): string {
+  if (!dateStr) return "Edição Colecionável";
+  try {
+    return new Date(dateStr).toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  } catch {
+    return "Edição Especial";
+  }
+}
 
 export default async function HomePage() {
   const featuredMuseums = getFeaturedMuseums();
 
-  // Buscar preview para os cards de Memória e Eventos
-  const previewAcervo = await getAcervoPhotos(1);
-  const semanaEdition = await getLatestEventEdition("semana_de_museus");
-  const previewSemana = semanaEdition ? await getEventPhotos(semanaEdition.id, 1) : [];
-  const primaveraEdition = await getLatestEventEdition("primavera_de_museus");
-  const previewPrimavera = primaveraEdition ? await getEventPhotos(primaveraEdition.id, 1) : [];
+  // Buscar preview editorial para a seção Publicações
+  const featuredPost = await OlharMuseuService.getFeaturedPost();
+  const secondaryPosts = await OlharMuseuService.getLatestPosts(
+    2,
+    featuredPost ? [featuredPost.id] : []
+  );
 
   return (
     <div className="space-y-16 md:space-y-24 pb-16">
@@ -256,62 +290,189 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* 3. Publicações */}
-        <section id="publicacoes">
+        {/* 3. Publicações (Preview Editorial Contemporâneo) */}
+        <section id="publicacoes" className="clay-card p-6 sm:p-8 md:p-12 relative overflow-hidden bg-white border border-stone">
           <SectionHeader
-            eyebrow="Pesquisa & Conhecimento"
+            eyebrow="Curadoria Editorial & Pesquisa"
             title="Publicações"
-            subtitle="Acesse nosso acervo bibliográfico, editoriais e catálogos desenvolvidos pelos pesquisadores."
+            subtitle="Acesse o informativo Olhar Museu, catálogos históricos, ensaios e pesquisas dedicadas à salvaguarda e à memória do patrimônio museológico de Ouro Preto."
+            separator={false}
+            className="mb-8 md:mb-10"
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <Link href="/publicacoes" className="clay-card p-6 flex flex-col justify-between hover:border-gold group transition-all border border-stone-light/50">
-              <div className="w-12 h-12 rounded-none bg-gold/15 text-gold flex items-center justify-center mb-4 group-hover:scale-110 transition-transform border border-gold/20">
-                <Book className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="font-serif font-bold text-night text-lg mb-1 group-hover:text-gold transition-colors">
-                  Publicações SIMOP
-                </h3>
-                <p className="text-xs text-blue-deep leading-relaxed">
-                  Artigos, catálogos e boletins.
-                </p>
-              </div>
-            </Link>
+          {/* Grid Editorial Assimétrico (12 Colunas) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
             
-            <Link href="/publicacoes" className="clay-card p-6 flex flex-col justify-between hover:border-gold group transition-all border border-stone-light/50">
-              <div className="w-12 h-12 rounded-none bg-gold/15 text-gold flex items-center justify-center mb-4 group-hover:scale-110 transition-transform border border-gold/20">
-                <FileText className="w-6 h-6" />
-              </div>
-              <div>
-                <h3 className="font-serif font-bold text-night text-lg mb-1 group-hover:text-gold transition-colors">
-                  Olhar Museu (Editorial)
-                </h3>
-                <p className="text-xs text-blue-deep leading-relaxed">
-                  Nossa coluna editorial oficial.
-                </p>
-              </div>
-            </Link>
+            {/* 3.1 MANCHETE PRINCIPAL / CAPA EDITORIAL (7 Colunas no Desktop) */}
+            <div className="lg:col-span-7 flex flex-col">
+              <Link
+                href="/publicacoes"
+                className="group clay-card bg-ivory/40 p-5 sm:p-7 border border-stone hover:border-gold transition-all duration-300 flex flex-col justify-between h-full"
+              >
+                <div>
+                  {/* Badges de Categoria & Metadados */}
+                  <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+                    <span className="px-3 py-1 bg-night text-gold text-[10px] sm:text-xs font-bold uppercase tracking-wider border border-gold/30">
+                      {featuredPost?.category?.name || "Informativo Oficial SiMOP"}
+                    </span>
+                    <div className="flex items-center gap-2 text-xs font-mono text-stone-dark">
+                      <Calendar className="w-3.5 h-3.5 text-gold" />
+                      <span>{formatPubDate(featuredPost?.published_at)}</span>
+                      <span>•</span>
+                      <span className="text-gold font-sans font-semibold text-[11px] uppercase tracking-wider flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-gold" />
+                        {featuredPost?.reading_time_minutes ? `${featuredPost.reading_time_minutes} min` : "Destaque"}
+                      </span>
+                    </div>
+                  </div>
 
-            <Link href="/publicacoes" className="clay-card p-6 flex flex-col justify-between hover:border-gold group transition-all border border-stone-light/50">
-              <div className="w-12 h-12 rounded-none bg-gold/15 text-gold flex items-center justify-center mb-4 group-hover:scale-110 transition-transform border border-gold/20">
-                <Library className="w-6 h-6" />
+                  {/* Imagem Editorial Panorâmica */}
+                  <div className="relative aspect-[16/10] w-full overflow-hidden border border-stone bg-stone-200 mb-5">
+                    <img
+                      src={
+                        featuredPost?.featured_image?.public_url ||
+                        "/images/publicacoes/capa-olhar-museu.webp"
+                      }
+                      alt={featuredPost?.title || "Capa do informativo Olhar Museu"}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-night/10 group-hover:bg-night/0 transition-colors duration-300" />
+                    <div className="absolute bottom-3 left-3 bg-night/85 backdrop-blur-sm px-2.5 py-1 text-ivory text-[10px] font-mono border border-stone-dark/40 flex items-center gap-1.5">
+                      <BookOpen className="w-3 h-3 text-gold" />
+                      <span>Edição em Foco</span>
+                    </div>
+                  </div>
+
+                  {/* Título & Resumo */}
+                  <div className="space-y-3">
+                    <h3 className="font-serif font-bold text-night text-xl sm:text-2xl lg:text-3xl leading-snug group-hover:text-gold transition-colors">
+                      {featuredPost?.title || "Olhar Museu: Memória, Museologia e Patrimônio Vivo em Ouro Preto"}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-blue-deep font-normal leading-relaxed line-clamp-3">
+                      {featuredPost?.excerpt ||
+                        "Informativo oficial do Sistema de Museus de Ouro Preto voltado à difusão das ações dos 16 museus associados, reunindo conteúdos sobre salvaguarda, memória coletiva, história da arte e diálogo cultural."}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Rodapé da Manchete */}
+                <div className="pt-5 mt-6 border-t border-stone flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-gold inline-block" />
+                    <span className="text-xs text-stone-dark font-mono">
+                      SiMOP • Repositório Editorial
+                    </span>
+                  </div>
+                  <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-night group-hover:text-gold transition-colors">
+                    <span>Acessar publicação</span>
+                    <ArrowRight className="w-4 h-4 text-gold transform group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </div>
+              </Link>
+            </div>
+
+            {/* 3.2 CADERNOS & EDIÇÕES SECUNDÁRIAS (5 Colunas no Desktop) */}
+            <div className="lg:col-span-5 flex flex-col justify-between space-y-4">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between pb-2 border-b border-stone/80">
+                  <span className="text-xs uppercase tracking-widest font-bold text-night font-mono flex items-center gap-2">
+                    <span className="w-1.5 h-1.5 bg-gold inline-block" />
+                    Cadernos & Acervo
+                  </span>
+                  <span className="text-[10px] font-mono text-stone-dark">Publicações & Guias</span>
+                </div>
+
+                {/* Card Secundário 1 */}
+                <Link
+                  href="/publicacoes"
+                  className="clay-card p-4 sm:p-5 bg-white border border-stone hover:border-gold group transition-all duration-300 block"
+                >
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <span className="px-2 py-0.5 bg-gold/15 text-gold text-[10px] font-bold uppercase tracking-wider border border-gold/30">
+                      {secondaryPosts[0]?.category?.name || "Catálogo Histórico"}
+                    </span>
+                    <span className="text-[10px] font-mono text-stone-dark">
+                      {formatPubDate(secondaryPosts[0]?.published_at) || "Edição 2014"}
+                    </span>
+                  </div>
+                  <h4 className="font-serif font-bold text-night text-base sm:text-lg leading-snug group-hover:text-gold transition-colors mb-1.5">
+                    {secondaryPosts[0]?.title || "Ouro Preto: Museus — Guia e Catálogo Geral"}
+                  </h4>
+                  <p className="text-xs text-stone-dark leading-relaxed line-clamp-2 mb-3">
+                    {secondaryPosts[0]?.excerpt ||
+                      "Mapeamento histórico e inventário descritivo das instituições museológicas, arquitetura e coleções preservadas no centro histórico."}
+                  </p>
+                  <div className="flex items-center justify-between pt-2 border-t border-stone/50 text-[11px] text-stone-dark group-hover:text-gold transition-colors">
+                    <span className="font-mono">Documentação SiMOP</span>
+                    <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </Link>
+
+                {/* Card Secundário 2 */}
+                <Link
+                  href="/publicacoes"
+                  className="clay-card p-4 sm:p-5 bg-white border border-stone hover:border-gold group transition-all duration-300 block"
+                >
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <span className="px-2 py-0.5 bg-gold/15 text-gold text-[10px] font-bold uppercase tracking-wider border border-gold/30">
+                      {secondaryPosts[1]?.category?.name || "Pesquisa & Museologia"}
+                    </span>
+                    <span className="text-[10px] font-mono text-stone-dark">
+                      {formatPubDate(secondaryPosts[1]?.published_at) || "Boletim Técnico"}
+                    </span>
+                  </div>
+                  <h4 className="font-serif font-bold text-night text-base sm:text-lg leading-snug group-hover:text-gold transition-colors mb-1.5">
+                    {secondaryPosts[1]?.title || "Cadernos de Salvaguarda & Acervos Mineiros"}
+                  </h4>
+                  <p className="text-xs text-stone-dark leading-relaxed line-clamp-2 mb-3">
+                    {secondaryPosts[1]?.excerpt ||
+                      "Artigos sobre conservação preventiva, extroversão museal e a atuação articulada das instituições patrimoniais em Minas Gerais."}
+                  </p>
+                  <div className="flex items-center justify-between pt-2 border-t border-stone/50 text-[11px] text-stone-dark group-hover:text-gold transition-colors">
+                    <span className="font-mono">Ensaio Técnico</span>
+                    <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </Link>
               </div>
-              <div>
-                <h3 className="font-serif font-bold text-night text-lg mb-1 group-hover:text-gold transition-colors">
-                  Ouro Preto: Museus (2014)
-                </h3>
-                <p className="text-xs text-blue-deep leading-relaxed">
-                  Material histórico de 2014.
+
+              {/* Callout Teaser da Trajetória Editorial */}
+              <div className="p-4 bg-ivory/80 border border-stone/80 text-xs text-stone-dark space-y-1.5">
+                <div className="flex items-center gap-2 text-night font-semibold text-[11px] uppercase tracking-wider font-mono">
+                  <Sparkles className="w-3.5 h-3.5 text-gold shrink-0" />
+                  <span>Trajetória Editorial (2012–2026)</span>
+                </div>
+                <p className="leading-relaxed text-[11px]">
+                  Edições colaborativas com a comunidade, registros da Primavera dos Museus e artigos sobre o circuito histórico de Ouro Preto.
                 </p>
               </div>
-            </Link>
+            </div>
+
           </div>
-          
-          <div className="text-center">
-            <Button href="/publicacoes" variant="secondary" size="md">
-              Acessar Publicações →
-            </Button>
+
+          {/* 3.3 RODAPÉ EDITORIAL & NAVEGAÇÃO */}
+          <div className="mt-8 pt-6 border-t border-stone flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs font-mono text-stone-dark">
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-gold inline-block" />
+                Informativo Olhar Museu
+              </span>
+              <span className="text-stone-dark/40 hidden sm:inline">•</span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-gold inline-block" />
+                Catálogos do SiMOP
+              </span>
+              <span className="text-stone-dark/40 hidden sm:inline">•</span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-gold inline-block" />
+                Artigos & Pesquisa
+              </span>
+            </div>
+
+            <div className="w-full sm:w-auto text-center">
+              <Button href="/publicacoes" variant="secondary" size="md" className="w-full sm:w-auto">
+                Explorar Publicações →
+              </Button>
+            </div>
           </div>
         </section>
 
@@ -489,97 +650,129 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* 5. Memória e Eventos */}
-        <section className="clay-card p-8 md:p-12 relative overflow-hidden bg-white">
+        {/* 5. Memória e Eventos (Eixos do Repositório) */}
+        <section id="memoria-e-eventos" className="clay-card p-6 sm:p-8 md:p-12 relative overflow-hidden bg-white border border-stone">
           <SectionHeader
-            eyebrow="Agenda & Registro"
+            eyebrow="Agenda Cultural & Salvaguarda"
             title="Memória e Eventos"
-            subtitle="Explore os registros fotográficos, exposições passadas e acompanhe a agenda cultural das instituições que compõem o SIMOP."
+            subtitle="Documentação histórica, registros e a salvaguarda da memória das grandes temporadas culturais dos museus de Ouro Preto."
+            separator={false}
+            className="mb-8 md:mb-10"
           />
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
+          {/* Grid dos 3 Eixos do Repositório */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             
-            {/* Card Acervo */}
-            <Link href="/memoria-e-eventos" className="relative h-64 sm:h-72 lg:h-80 flex flex-col justify-end p-6 group overflow-hidden border border-stone transition-all hover:border-gold">
-              <div className="absolute inset-0 bg-stone-300">
-                {previewAcervo[0] && (
-                  <img
-                    src={getPhotoUrl(previewAcervo[0].storage_path)}
-                    alt="Preview Acervo"
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                )}
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-night/95 via-night/50 to-transparent group-hover:via-night/60 transition-all duration-300" />
-              <div className="relative z-10">
-                <div className="w-10 h-10 rounded-none bg-gold/20 text-gold flex items-center justify-center mb-4 backdrop-blur-sm border border-gold/30 group-hover:scale-110 transition-transform">
-                  <ImageIcon className="w-5 h-5" />
+            {/* Eixo 1: Semana de Museus */}
+            <Link
+              href="/memoria-e-eventos"
+              className="clay-card p-6 sm:p-7 bg-white border border-stone hover:border-gold group transition-all duration-300 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-5">
+                  <div className="w-12 h-12 rounded-none bg-gold/15 text-gold flex items-center justify-center group-hover:scale-110 group-hover:bg-gold/25 transition-all border border-gold/30">
+                    <CalendarHeart className="w-6 h-6" />
+                  </div>
+                  <span className="text-[10px] font-semibold uppercase tracking-widest px-2.5 py-1 bg-gold/15 border border-gold/30 text-gold">
+                    Maio • IBRAM
+                  </span>
                 </div>
-                <h3 className="font-serif font-bold text-ivory text-xl mb-1.5 group-hover:text-gold transition-colors">
-                  Acervo de Fotos
-                </h3>
-                <p className="text-xs text-stone leading-relaxed">
-                  Registros visuais e memória institucional dos museus de Ouro Preto.
-                </p>
-              </div>
-            </Link>
-
-            {/* Card Semana de Museus */}
-            <Link href="/memoria-e-eventos" className="relative h-64 sm:h-72 lg:h-80 flex flex-col justify-end p-6 group overflow-hidden border border-stone transition-all hover:border-gold">
-              <div className="absolute inset-0 bg-stone-300">
-                {previewSemana[0] && (
-                  <img
-                    src={getPhotoUrl(previewSemana[0].storage_path)}
-                    alt="Preview Semana de Museus"
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                )}
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-night/95 via-night/50 to-transparent group-hover:via-night/60 transition-all duration-300" />
-              <div className="relative z-10">
-                <div className="w-10 h-10 rounded-none bg-gold/20 text-gold flex items-center justify-center mb-4 backdrop-blur-sm border border-gold/30 group-hover:scale-110 transition-transform">
-                  <CalendarHeart className="w-5 h-5" />
-                </div>
-                <h3 className="font-serif font-bold text-ivory text-xl mb-1.5 group-hover:text-gold transition-colors">
+                <h3 className="font-serif font-bold text-night text-xl mb-2 group-hover:text-gold transition-colors">
                   Semana de Museus
                 </h3>
-                <p className="text-xs text-stone leading-relaxed">
-                  {semanaEdition ? `Reviva a edição de ${semanaEdition.year}. ` : ""}Edições, programações e imagens históricas.
+                <p className="text-xs text-stone-dark leading-relaxed">
+                  Mobilização nacional em comemoração ao Dia Internacional dos Museus, reunindo seminários, visitas mediadas e programações simultâneas nas instituições do circuito.
                 </p>
+              </div>
+
+              <div className="pt-6 mt-4 border-t border-stone/60 flex items-center justify-between text-xs text-night font-bold uppercase tracking-wider group-hover:text-gold transition-colors">
+                <span>Ver edições & fotos</span>
+                <ArrowRight className="w-4 h-4 text-gold transform group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
 
-            {/* Card Primavera de Museus */}
-            <Link href="/memoria-e-eventos" className="relative h-64 sm:h-72 lg:h-80 flex flex-col justify-end p-6 group overflow-hidden border border-stone transition-all hover:border-gold">
-              <div className="absolute inset-0 bg-stone-300">
-                {previewPrimavera[0] && (
-                  <img
-                    src={getPhotoUrl(previewPrimavera[0].storage_path)}
-                    alt="Preview Primavera de Museus"
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                )}
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-night/95 via-night/50 to-transparent group-hover:via-night/60 transition-all duration-300" />
-              <div className="relative z-10">
-                <div className="w-10 h-10 rounded-none bg-gold/20 text-gold flex items-center justify-center mb-4 backdrop-blur-sm border border-gold/30 group-hover:scale-110 transition-transform">
-                  <Compass className="w-5 h-5" />
+            {/* Eixo 2: Primavera de Museus */}
+            <Link
+              href="/memoria-e-eventos"
+              className="clay-card p-6 sm:p-7 bg-white border border-stone hover:border-gold group transition-all duration-300 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-5">
+                  <div className="w-12 h-12 rounded-none bg-gold/15 text-gold flex items-center justify-center group-hover:scale-110 group-hover:bg-gold/25 transition-all border border-gold/30">
+                    <Compass className="w-6 h-6" />
+                  </div>
+                  <span className="text-[10px] font-semibold uppercase tracking-widest px-2.5 py-1 bg-gold/15 border border-gold/30 text-gold">
+                    Setembro • Edições
+                  </span>
                 </div>
-                <h3 className="font-serif font-bold text-ivory text-xl mb-1.5 group-hover:text-gold transition-colors">
+                <h3 className="font-serif font-bold text-night text-xl mb-2 group-hover:text-gold transition-colors">
                   Primavera de Museus
                 </h3>
-                <p className="text-xs text-stone leading-relaxed">
-                  {primaveraEdition ? `Recorde a edição de ${primaveraEdition.year}. ` : ""}Celebração anual do patrimônio e da cultura.
+                <p className="text-xs text-stone-dark leading-relaxed">
+                  Temporada temática que celebra a chegada da primavera na cidade histórica, promovendo reflexões contemporâneas, novas exposições e diálogo com a comunidade.
                 </p>
+              </div>
+
+              <div className="pt-6 mt-4 border-t border-stone/60 flex items-center justify-between text-xs text-night font-bold uppercase tracking-wider group-hover:text-gold transition-colors">
+                <span>Ver edições & fotos</span>
+                <ArrowRight className="w-4 h-4 text-gold transform group-hover:translate-x-1 transition-transform" />
+              </div>
+            </Link>
+
+            {/* Eixo 3: Acervo de Fotos & Documentação */}
+            <Link
+              href="/memoria-e-eventos"
+              className="clay-card p-6 sm:p-7 bg-white border border-stone hover:border-gold group transition-all duration-300 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-5">
+                  <div className="w-12 h-12 rounded-none bg-gold/15 text-gold flex items-center justify-center group-hover:scale-110 group-hover:bg-gold/25 transition-all border border-gold/30">
+                    <Camera className="w-6 h-6" />
+                  </div>
+                  <span className="text-[10px] font-semibold uppercase tracking-widest px-2.5 py-1 bg-gold/15 border border-gold/30 text-gold">
+                    Arquivo Digital
+                  </span>
+                </div>
+                <h3 className="font-serif font-bold text-night text-xl mb-2 group-hover:text-gold transition-colors">
+                  Acervo de Fotos
+                </h3>
+                <p className="text-xs text-stone-dark leading-relaxed">
+                  Repositório iconográfico para salvaguarda de registros do patrimônio edificado, arquitetura colonial, festividades e memórias das instituições de Ouro Preto.
+                </p>
+              </div>
+
+              <div className="pt-6 mt-4 border-t border-stone/60 flex items-center justify-between text-xs text-night font-bold uppercase tracking-wider group-hover:text-gold transition-colors">
+                <span>Explorar acervo</span>
+                <ArrowRight className="w-4 h-4 text-gold transform group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
 
           </div>
-          
-          <div className="text-center">
-            <Button href="/memoria-e-eventos" variant="secondary" size="md">
-              Saber mais →
-            </Button>
+
+          {/* Rodapé & Navegação */}
+          <div className="mt-8 pt-6 border-t border-stone flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs font-mono text-stone-dark">
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-gold inline-block" />
+                Semana de Museus
+              </span>
+              <span className="text-stone-dark/40 hidden sm:inline">•</span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-gold inline-block" />
+                Primavera de Museus
+              </span>
+              <span className="text-stone-dark/40 hidden sm:inline">•</span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-gold inline-block" />
+                Acervo Fotográfico
+              </span>
+            </div>
+
+            <div className="w-full sm:w-auto text-center">
+              <Button href="/memoria-e-eventos" variant="secondary" size="md" className="w-full sm:w-auto">
+                Conhecer Memória e Eventos →
+              </Button>
+            </div>
           </div>
         </section>
 

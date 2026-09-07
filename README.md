@@ -1,222 +1,309 @@
-# SIMOP — Sistema de Museus de Ouro Preto
+<div align="center">
 
-Portal institucional, turístico e documental do **Sistema de Museus de Ouro Preto (SIMOP)**, articulador dos espaços museais, centros culturais e iniciativas de preservação da memória histórica de Ouro Preto, Minas Gerais.
+# 🏛️ SiMOP — Sistema de Museus de Ouro Preto
 
----
+**Plataforma digital integrada de salvaguarda, memória histórica, curadoria editorial e difusão das instituições museais de Ouro Preto, Minas Gerais.**
 
-## Visão Geral
+[![Next.js](https://img.shields.io/badge/Next.js-15.1-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19.0-blue?style=for-the-badge&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
+[![Vercel](https://img.shields.io/badge/Deploy-Vercel-black?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-Ouro Preto abriga um dos mais expressivos conjuntos arquitetônicos e museológicos do barroco mundial. O **SIMOP** surge como plataforma centralizadora de articulação, difusão e preservação, conectando os diversos museus municipais, federais, estaduais e comunitários a um ecossistema digital integrado.
+[Acessar Aplicação](https://simop.vercel.app) • [Estrutura do Banco](#-arquitetura-do-banco-de-dados) • [Engenharia & Arquitetura](#-arquitetura-e-engenharia-de-software) • [Instalação](#-instalação-e-execução-local)
 
-- **Problema que resolve:** A dispersão das informações sobre os museus de Ouro Preto, dificuldades de consulta a horários e acervos, e a fragmentação do registro de eventos históricos anuais (como a Semana de Museus e a Primavera de Museus).
-- **Objetivo da aplicação:** Fornecer uma experiência de navegação rica, fluida e acessível sobre os espaços culturais, acervo documental, leis patrimoniais, publicações e eventos da cidade.
-- **Público-alvo:** Turistas, pesquisadores, educadores, estudantes e a comunidade ouro-pretana.
-
----
-
-## Stack Tecnológica
-
-O projeto utiliza exclusivamente tecnologias modernas e estáveis do ecossistema React/Next.js:
-
-- **Framework:** [Next.js 15](https://nextjs.org/) (App Router, Server Components e Static Site Generation)
-- **Biblioteca Base:** [React 19](https://react.dev/)
-- **Linguagem:** [TypeScript 5](https://www.typescriptlang.org/)
-- **Estilização:** [Tailwind CSS 3](https://tailwindcss.com/) com PostCSS e Autoprefixer
-- **Ícones:** [Lucide React](https://lucide.dev/)
-- **Otimização de Imagens:** [Sharp](https://sharp.pixelplumbing.com/) (otimizador nativo para produção no Next.js)
-- **Qualidade de Código:** [ESLint 9](https://eslint.org/) com `eslint-config-next`
-- **Camada Opcional de Persistência:** `@supabase/ssr` e `@supabase/supabase-js` (com graceful fallback quando não configurado)
+</div>
 
 ---
 
-## Arquitetura
+## 📌 Sobre o Projeto
 
-A aplicação é orientada à arquitetura do **Next.js App Router**:
+Ouro Preto abriga um dos mais expressivos e relevantes conjuntos arquitetônicos e museológicos do barroco e da história do Brasil. O **SIMOP (Sistema de Museus de Ouro Preto)** foi instituído pela **Lei Municipal nº 305/2006** como uma estrutura colegiada e colaborativa para articular, planejar e integrar as atividades de **16 instituições museais** (federais, estaduais, municipais, universitárias e fundacionais).
 
-- **Server-First Rendering:** A maior parte das páginas (Home, Museus, Publicações, Legislações, Tecnologia) é renderizada no servidor como Server Components com ISR/SSG, assegurando alta performance (Core Web Vitals) e excelente indexação (SEO).
-- **Graceful Fallback & Resiliência:** Os serviços de dados em `src/lib/` foram desenhados de forma desacoplada e defensiva. Se variáveis de ambiente de banco de dados não estiverem configuradas, o sistema opera de forma autônoma com fallbacks locais elegantes, sem travar nem quebrar a experiência do usuário.
-- **Módulos Principais:**
-  - `/` — Página inicial com destaques, indicadores, acesso rápido e cards de eventos.
-  - `/museus` e `/museus/[slug]` — Catálogo de museus com filtros dinâmicos e páginas de detalhes (acervo, história, galeria, horários e mapas).
-  - `/memoria-e-eventos` — Hub de memória contendo acervo fotográfico histórico e edições da Semana e da Primavera de Museus.
-  - `/publicacoes` — Central de informativos e matérias do projeto editorial *Olhar Museu*.
-  - `/institucional` e `/legislacoes` — Marco regulatório, diretrizes de governança e repositório de documentos legislativos.
-  - `/buscar` — Mecanismo de busca textual em todo o ecossistema cultural.
-  - `/tecnologia` — Apresentação técnica do portal e padrões arquiteturais adotados.
-  - `/admin` e `/admin/login` — Painel administrativo para curadoria de fotos e edições de eventos.
+Este projeto é o **portal oficial e aberto** do sistema. Desenvolvido por uma **equipe multidisciplinar** envolvendo engenheiros de software, pesquisadores, museólogos, historiadores e designers, a plataforma resolve os principais desafios do ecossistema cultural do município:
+
+1. **Centralização do Patrimônio:** Unifica a consulta a acervos, histórias, horários, exposições e contatos das 16 instituições.
+2. **Salvaguarda e Memória:** Repositório fotográfico histórico e digitalização documental das grandes temporadas culturais (*Semana de Museus* e *Primavera de Museus*).
+3. **Hub Editorial Autônomo:** Publicação digital e difusão das reportagens, ensaios e boletins do projeto *Olhar Museu*.
+4. **Governança e Transparência:** Disponibilização pública de estatutos federais, leis municipais e o regimento interno do Conselho Gestor.
+
+> 🌐 **Código Aberto:** O código-fonte deste projeto é aberto e de livre consulta, desenvolvido com as melhores práticas da engenharia de software contemporânea para servir como referência técnica e plataforma de impacto social e cultural.
 
 ---
 
-## Estrutura do Projeto
+## 🏗️ Arquitetura e Engenharia de Software
+
+O SiMOP foi projetado sob os padrões mais recentes do ecossistema **Next.js (App Router)** com foco em resiliência, escalabilidade e excelente experiência de usuário (Core Web Vitals):
+
+### 1. Server-First & Incremental Static Regeneration (ISR)
+A maioria absoluta das páginas é renderizada no servidor (`React Server Components`). As páginas de museus, legislações, publicações e eventos operam com revalidação estática periódica (`export const revalidate = 60`), garantindo carregamento instantâneo para o visitante e indexação impecável para motores de busca (SEO).
+
+### 2. Resiliência por Design: *Graceful Fallback Pattern*
+O sistema foi concebido de forma defensiva para operar com **zero quebras**. Caso a instância do banco de dados (Supabase) esteja desconectada, em manutenção ou sem credenciais no ambiente local:
+- Os serviços de dados em `src/lib/` interceptam requisições graciosamente;
+- Fallbacks estruturados locais mantêm a interface 100% funcional e consistente;
+- Nenhuma tela em branco ou crash de renderização é exibido ao usuário final.
+
+### 3. Isolamento Multi-Schema em PostgreSQL
+Em vez de misturar dados operacionais e editoriais na mesma tabela pública, o banco de dados é dividido em **esquemas lógicos segregados**:
+- **`public`**: Gerencia o histórico das edições anuais e acervo iconográfico do módulo *Memória e Eventos*.
+- **`editorial`**: Um CMS desacoplado completo para o jornalismo cultural do *Olhar Museu*, com controle de autores, categorias, mídias, tags e conteúdo rico (`JSONB`).
+
+### 4. Design System Temático & Acessibilidade
+Construído com **Tailwind CSS**, o visual mescla componentes táteis em *Claymorphism* sutil com uma paleta histórica nobre inspirada em Ouro Preto:
+- `night` (`#161310`): O escuro das pedras seculares de cantaria.
+- `gold` (`#C99A45`): O ouro e as talhas barrocas coloniais.
+- `ivory` (`#F7F5F0`): O marfim das paredes caiadas e papel de imprensa.
+- `stone` (`#E6E1D8`): Os tons terrosos do patrimônio mineiro.
+
+---
+
+## 🗄️ Arquitetura do Banco de Dados
+
+O backend é fundamentado no **Supabase (PostgreSQL 15+)**, utilizando o recurso nativo de schemas para separar responsabilidades de domínio:
+
+```mermaid
+erDiagram
+    %% =========================================
+    %% SCHEMA: public (Memória e Eventos)
+    %% =========================================
+    MEMORIA_EVENT_EDITIONS ||--o{ MEMORIA_PHOTOS : "possui acervo"
+    
+    MEMORIA_EVENT_EDITIONS {
+        uuid id PK
+        enum event_type "semana_de_museus | primavera_de_museus"
+        integer year "1900..2100"
+        integer edition_number
+        text title
+        text subtitle
+        text description
+        boolean is_current
+        boolean is_published
+        text external_drive_url
+        timestamp created_at
+    }
+
+    MEMORIA_PHOTOS {
+        uuid id PK
+        uuid edition_id FK
+        enum section_type "acervo | semana | primavera"
+        text storage_path "Supabase Storage"
+        text caption
+        text photographer
+        text reference_code
+        boolean is_featured
+        boolean is_published
+        timestamp created_at
+    }
+
+    %% =========================================
+    %% SCHEMA: editorial (Informativo Olhar Museu)
+    %% =========================================
+    EDITORIAL_USERS ||--o{ EDITORIAL_POSTS : "escreve"
+    EDITORIAL_USERS ||--o{ EDITORIAL_MEDIA : "faz upload"
+    EDITORIAL_CATEGORIES ||--o{ EDITORIAL_POSTS : "classifica"
+    EDITORIAL_MUSEUMS ||--o{ EDITORIAL_POSTS : "vincula"
+    EDITORIAL_MEDIA ||--o{ EDITORIAL_MUSEUMS : "imagem de capa"
+    EDITORIAL_MEDIA ||--o{ EDITORIAL_POSTS : "imagem destacada"
+    EDITORIAL_POSTS ||--o{ EDITORIAL_POST_TAGS : "contém"
+    EDITORIAL_TAGS ||--o{ EDITORIAL_POST_TAGS : "etiqueta"
+
+    EDITORIAL_USERS {
+        uuid id PK "auth.users(id)"
+        text name
+        text email UK
+        enum role "ADMIN | EDITOR | JOURNALIST"
+        boolean active
+    }
+
+    EDITORIAL_MEDIA {
+        uuid id PK
+        text filename
+        text bucket "olhar-museu"
+        text path UK
+        text mime_type
+        bigint size_bytes
+        uuid uploaded_by FK
+    }
+
+    EDITORIAL_CATEGORIES {
+        uuid id PK
+        text name UK
+        text slug UK
+        boolean active
+    }
+
+    EDITORIAL_MUSEUMS {
+        uuid id PK
+        text name UK
+        text slug UK
+        uuid featured_image_id FK
+        boolean active
+    }
+
+    EDITORIAL_TAGS {
+        uuid id PK
+        text name UK
+        text slug UK
+    }
+
+    EDITORIAL_POSTS {
+        uuid id PK
+        text title
+        text slug UK
+        text excerpt
+        jsonb content "Rich-text AST"
+        enum status "DRAFT | REVIEW | PUBLISHED | ARCHIVED"
+        uuid author_id FK
+        uuid category_id FK
+        uuid museum_id FK
+        uuid featured_image_id FK
+        integer reading_time_minutes
+        boolean featured
+        timestamp published_at
+    }
+
+    EDITORIAL_POST_TAGS {
+        uuid post_id PK,FK
+        uuid tag_id PK,FK
+    }
+```
+
+### Detalhamento dos Esquemas
+
+| Schema | Tabela | Propósito e Características |
+| :--- | :--- | :--- |
+| `public` | `memoria_event_editions` | Catálogo das edições anuais dos eventos oficiais com suporte a link para arquivo em nuvem e indicador de edição vigente. |
+| `public` | `memoria_photos` | Documentação fotográfica histórica referenciada por caminhos de bucket no Supabase Storage, fotógrafo e código de tombamento. |
+| `editorial` | `posts` | Núcleo do CMS editorial do informativo *Olhar Museu*. Armazena manchetes, tempo de leitura, metadados SEO e conteúdo estruturado em `JSONB`. |
+| `editorial` | `media` | Gestor de ativos digitais (fotografias em alta definição, metadados de dimensões e acessibilidade com `alt_text`). |
+| `editorial` | `users` | Jornalistas e curadores vinculados ao `auth.users` do Supabase com níveis de permissão (`JOURNALIST`, `EDITOR`, `ADMIN`). |
+| `editorial` | `museums`, `categories`, `tags` | Taxonomias de relacionamento cruzado para categorização contextual das matérias jornalísticas. |
+
+---
+
+## 📂 Estrutura do Repositório
 
 ```
 sistema-de-museus/
-├── public/                     # Arquivos estáticos públicos
-│   ├── favicon.ico             # Ícone de favoritos
-│   └── images/                 # Fotografias de museus, heróis e logotipos
-├── src/                        # Código-fonte principal
-│   ├── app/                    # Rotas e layouts do Next.js App Router
-│   │   ├── admin/              # Painel administrativo e autenticação
-│   │   ├── buscar/             # Página de busca global
-│   │   ├── institucional/      # Apresentação do SiMOP e governança
-│   │   ├── legislacoes/        # Acervo normativo e leis patrimoniais
-│   │   ├── memoria-e-eventos/  # Hub de eventos e acervo fotográfico
-│   │   ├── museus/             # Catálogo e páginas dinâmicas por slug
-│   │   ├── publicacoes/        # Hub editorial Olhar Museu
-│   │   ├── sobre/              # Sobre a iniciativa
-│   │   ├── tecnologia/         # Página de arquitetura técnica
-│   │   ├── layout.tsx          # Layout global (Header, Footer, Fontes)
-│   │   ├── page.tsx            # Página inicial
-│   │   └── globals.css         # Variáveis CSS e temas
-│   ├── components/             # Componentes modulares reutilizáveis
-│   │   ├── admin/              # Componentes de gestão de fotos e eventos
-│   │   ├── layout/             # Header, Footer, Navegação
-│   │   ├── memoria/            # Cards, galerias e cronologias
-│   │   ├── museum/             # Cards, acordeons e mapas de museus
-│   │   └── ui/                 # Componentes genéricos de UI (botões, headers)
-│   ├── lib/                    # Camada de lógica de dados e serviços
-│   │   ├── memoria.ts          # Consulta de eventos e fotos com fallback
-│   │   ├── museums.ts          # Catálogo tipado dos museus de Ouro Preto
-│   │   ├── olharMuseuService.ts# Integração editorial
-│   │   └── supabase.ts         # Inicialização segura do cliente Supabase
-│   ├── types/                  # Tipagens TypeScript (museus, eventos, fotos)
-│   ├── utils/                  # Utilitários auxiliares (middleware Supabase)
-│   └── middleware.ts           # Middleware Next.js com proteção defensiva
-├── .env.example                # Exemplo documentado de variáveis de ambiente
-├── .gitignore                  # Regras de exclusão do Git
-├── eslint.config.mjs           # Configuração moderna do ESLint 9
-├── next.config.ts              # Configuração do Next.js
-├── package.json                # Manifesto de dependências e scripts
-├── package-lock.json           # Lockfile oficial (npm)
-├── postcss.config.mjs          # Configuração PostCSS
-├── tailwind.config.ts          # Design System e tema de cores do Tailwind
-└── tsconfig.json               # Configuração do compilador TypeScript
+├── public/                     # Ativos estáticos públicos
+│   ├── favicon.ico             # Identidade visual (ícone)
+│   └── images/                 # Otimizações WebP de logos, acervos e heróis
+├── src/                        # Código-fonte da aplicação
+│   ├── app/                    # Next.js 15 App Router (Rotas e Layouts)
+│   │   ├── admin/              # Painel administrativo de curadoria
+│   │   ├── buscar/             # Motor de busca textual global
+│   │   ├── institucional/      # Apresentação do SiMOP e Conselho Gestor
+│   │   ├── legislacoes/        # Repositório de leis e regimentos municipais/federais
+│   │   ├── memoria-e-eventos/  # Hub visual: Semana de Museus, Primavera e Acervo
+│   │   ├── museus/             # Catálogo dos 16 museus com páginas dinâmicas [slug]
+│   │   ├── publicacoes/        # Hub de jornalismo cultural do projeto Olhar Museu
+│   │   ├── layout.tsx          # Layout mestre (Header, Footer, tipografia)
+│   │   ├── page.tsx            # Home Page com previews editoriais contemporâneos
+│   │   └── globals.css         # Tokens de design e animações customizadas
+│   ├── components/             # Arquitetura modular de componentes
+│   │   ├── admin/              # Gerenciadores de fotos e eventos
+│   │   ├── layout/             # Header com navegação responsiva e Footer
+│   │   ├── memoria/            # Cards e componentes de acervo e cronologia
+│   │   ├── museum/             # Cards expansíveis, acordeons mobile e galeria
+│   │   ├── search/             # Barra de busca e filtros combinados
+│   │   └── ui/                 # Componentes atômicos (SectionHeader, Button, etc.)
+│   ├── lib/                    # Camada de serviços desacoplada
+│   │   ├── memoria.ts          # Serviço de acervo e eventos com fallback gracioso
+│   │   ├── museums.ts          # Base de conhecimento tipada dos 16 museus
+│   │   ├── olharMuseuService.ts# Integração com o schema editorial do Supabase
+│   │   └── supabase.ts         # Inicialização do cliente Supabase
+│   ├── types/                  # Contratos estritos de tipagem TypeScript
+│   ├── utils/                  # Utilitários de middleware e sessões
+│   └── middleware.ts           # Middleware com proteção defensiva para rotas
+├── .env.example                # Documentação das variáveis de ambiente
+├── .gitignore                  # Arquivos e diretórios ignorados pelo Git
+├── eslint.config.mjs           # Regras modernas do ESLint 9 (Flat Config)
+├── next.config.ts              # Configurações de compilação Next.js
+├── package.json                # Dependências e scripts do projeto
+├── tailwind.config.ts          # Tokens e extensão do tema visual
+└── tsconfig.json               # Configurações estritas do TypeScript
 ```
 
 ---
 
-## Pré-requisitos
+## 💻 Instalação e Execução Local
 
-- **Node.js:** Versão 20.x ou superior (conforme especificado em `package.json` em `engines`)
-- **Package Manager:** `npm` (versão 10.x ou superior)
+### Pré-requisitos
+- **Node.js:** Versão `20.x` ou superior (recomendado LTS)
+- **Gerenciador de Pacotes:** `npm` (versão 10+)
 
----
+### Passo a Passo
 
-## Instalação
+1. **Clonar o Repositório:**
+   ```bash
+   git clone https://github.com/rauanmartech/simop.git
+   cd simop
+   ```
 
-1. Clone o repositório:
-```bash
-git clone https://github.com/rauanmartech/simop.git
-cd simop
-```
+2. **Instalar Dependências:**
+   ```bash
+   npm install
+   ```
 
-2. Instale as dependências:
-```bash
-npm install
-```
+3. **Configuração de Ambiente (Opcional):**
+   ```bash
+   cp .env.example .env.local
+   ```
+   > *Nota: O projeto foi desenhado para rodar perfeitamente sem o preenchimento dessas variáveis em ambiente local graças à camada de mock/fallback automático.*
 
-3. Configure as variáveis de ambiente (opcional):
-```bash
-cp .env.example .env.local
-```
-> *Nota: A aplicação inicializa e executa perfeitamente em modo estático mesmo sem o preenchimento do `.env.local`.*
-
----
-
-## Desenvolvimento
-
-Inicie o servidor de desenvolvimento local:
-
-```bash
-npm run dev
-```
-
-Acesse [http://localhost:3000](http://localhost:3000) no navegador.
+4. **Executar o Servidor de Desenvolvimento:**
+   ```bash
+   npm run dev
+   ```
+   Acesse a aplicação em [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## Build de Produção
+## ⚙️ Scripts Disponíveis
 
-Para validar a integridade dos tipos e gerar o bundle de produção otimizado:
-
-```bash
-npm run build
-```
-
-Para executar o servidor de produção localmente a partir do build gerado:
-
-```bash
-npm run start
-```
+| Comando | Descrição |
+| :--- | :--- |
+| `npm run dev` | Inicia o servidor local de desenvolvimento com Fast Refresh. |
+| `npm run build` | Compila o bundle otimizado de produção e valida tipos estáticos. |
+| `npm run start` | Executa o servidor Node.js com a compilação gerada de produção. |
+| `npm run lint` | Analisa a conformidade do código via ESLint 9. |
+| `npx tsc --noEmit` | Valida todos os contratos e integridade de tipos do TypeScript. |
 
 ---
 
-## Deploy
+## 🌐 Deploy em Produção
 
-O projeto está otimizado para deploy em plataformas de hospedagem compatíveis com Next.js:
+O projeto foi homologado e otimizado para deploy na **Vercel**:
 
-### Vercel (Recomendado)
-1. Conecte o repositório GitHub à [Vercel](https://vercel.com/).
-2. O framework Next.js será detectado automaticamente.
-3. Se desejar habilitar persistência dinâmica, adicione as variáveis de ambiente descritas em `.env.example` no painel do projeto na Vercel.
-4. Conclua o deploy.
-
-### Servidores Node.js / Docker
-O projeto pode ser executado em qualquer ambiente Linux/Windows capaz de rodar Node.js 20+, executando `npm run build` seguido de `npm run start`.
+1. Conecte o repositório GitHub na plataforma [Vercel](https://vercel.com/).
+2. O framework Next.js será reconhecido de forma nativa.
+3. Insira as variáveis de ambiente opcionais (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`) no painel *Settings > Environment Variables* caso queira sincronizar dados ao vivo com a base em nuvem.
+4. O build e deploy serão realizados automaticamente a cada atualização na branch `main`.
 
 ---
 
-## Variáveis de Ambiente
+## 👥 Equipe e Créditos Institucionais
 
-As variáveis de ambiente são **opcionais**. Quando ausentes, o sistema ativa automaticamente respostas seguras e fallbacks locais.
+O SiMOP é uma iniciativa de salvaguarda e união da comunidade cultural de Ouro Preto:
 
-| Variável | Finalidade | Obrigatória | Exemplo Seguro |
-| :--- | :--- | :---: | :--- |
-| `NEXT_PUBLIC_SUPABASE_URL` | URL da instância Supabase (acervo dinâmico/fotos) | Não | `https://xyzcompany.supabase.co` |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Chave pública anônima do Supabase | Não | `sb_publishable_...` |
-| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Chave publicável do Supabase (alternativa à anon) | Não | `sb_publishable_...` |
-| `NEXT_PUBLIC_OLHAR_MUSEU_URL` | URL do hub editorial externo Olhar Museu | Não | `http://localhost:3001` |
-
-> ⚠️ **Atenção:** Nunca versione arquivos `.env`, `.env.local` ou credenciais privadas no repositório Git.
+- **Coordenação Executiva:** Ranielle Fabiane Rodrigues e Matheus José Mendes Bernardes.
+- **Equipe Técnica e Curadoria:** Stella de Abreu Alves Ker e equipe técnica SiMOP.
+- **Conselho Gestor:** Composto por representantes de 16 instituições museológicas ouro-pretanas (Museu da Inconfidência, Museu Casa dos Contos, Museu de Arte Sacra, Museu Boulieu, Museu Casa Guignard, Museu de Ciência e Técnica da Escola de Minas/UFOP, Museu do Oratório, entre outros).
+- **Desenvolvimento Tecnológico:** Equipe de engenharia e desenvolvimento digital orientada ao impacto social e preservação histórica.
 
 ---
 
-## Scripts Disponíveis
+## 📄 Licença
 
-| Script | Comando | Descrição |
-| :--- | :--- | :--- |
-| `dev` | `next dev` | Inicia o servidor local de desenvolvimento com hot-reload |
-| `build` | `next build` | Compila o projeto e gera os pacotes otimizados de produção |
-| `start` | `next start` | Inicia o servidor HTTP em modo de produção |
-| `lint` | `eslint .` | Executa a verificação estática de código com ESLint 9 |
+Este projeto é disponibilizado sob a licença **MIT**, encorajando o estudo, a difusão e a evolução de tecnologias abertas aplicadas ao patrimônio cultural e à museologia.
+
+Consulte o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ---
 
-## Qualidade e Lint
-
-Para verificar a conformidade do código com as regras de tipagem e boas práticas:
-
-```bash
-npm run lint
-```
-
-Para validar a tipagem TypeScript:
-
-```bash
-npx tsc --noEmit
-```
-
----
-
-## Convenções de Desenvolvimento
-
-- **Nomenclatura:** PascalCase para componentes React (`MuseumCard.tsx`), camelCase para utilitários e serviços (`museums.ts`).
-- **Segurança de Tipos:** Estrito cumprimento de contratos TypeScript, evitando uso de `any` em rotas e componentes públicos.
-- **Isolamento de Componentes:** Componentes que exigem estado ou hooks do browser devem declarar `"use client"` no topo. Demais componentes devem permanecer como Server Components para preservar a performance.
-- **Design System:** Estilização utilitária via Tailwind CSS, preservando a identidade visual barroca e institucional da plataforma (tons de dourado, marfim e escuro patrimonial).
-
----
-
-## Licença
-
-Projeto privado e proprietário — Sistema de Museus de Ouro Preto (SIMOP). Todos os direitos reservados.
+<div align="center">
+  <sub>Preservando a memória, conectando instituições e celebrando a cultura de Ouro Preto.</sub>
+</div>

@@ -7,6 +7,7 @@ interface SectionHeaderProps {
   align?: "left" | "center";
   className?: string;
   dark?: boolean;
+  separator?: boolean;
 }
 
 export const SectionHeader: React.FC<SectionHeaderProps> = ({
@@ -16,15 +17,16 @@ export const SectionHeader: React.FC<SectionHeaderProps> = ({
   align = "left",
   className = "",
   dark = false,
+  separator = true,
 }) => {
   const alignClass = align === "center" ? "text-center items-center" : "text-left items-start";
   
   const titleColor = dark ? "text-ivory" : "text-night";
   const subtitleColor = dark ? "text-stone" : "text-blue-deep";
-  const borderColor = dark ? "border-stone-dark/50" : "border-stone/50";
+  const borderClass = separator ? (dark ? "border-b border-stone-dark/50 pb-6" : "border-b border-stone/50 pb-6") : "";
 
   return (
-    <div className={`flex flex-col ${alignClass} mb-12 border-b ${borderColor} pb-6 ${className}`}>
+    <div className={`flex flex-col ${alignClass} mb-12 ${borderClass} ${className}`}>
       {eyebrow && (
         <div className="flex items-center gap-2 mb-3">
           <span className="h-[1px] w-8 bg-gold rounded-none" />
