@@ -1,0 +1,57 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Production builds & outputs
+dist/
+build/
+/.next/
+/out/
+
+# Local environment & secret files
+.env
+.env.*
+!.env.example
+
+# Logs & debug
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing & coverage
+/coverage
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Vercel
+.vercel
+
+# TypeScript build info
+*.tsbuildinfo
+next-env.d.ts
+
+# Local project documentation, specifications and independent projects
+briefing/
+docs/
+olhar-museu-editorial/
+memoria-e-eventos/
+
+# Certificate and secrets
+*.pem
+*.key
+*.cert
