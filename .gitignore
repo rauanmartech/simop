@@ -46,10 +46,10 @@ Thumbs.db
 next-env.d.ts
 
 # Local project documentation, specifications and independent projects
-briefing/
-docs/
-olhar-museu-editorial/
-memoria-e-eventos/
+/briefing/
+/docs/
+/olhar-museu-editorial/
+/memoria-e-eventos/
 
 # Certificate and secrets
 *.pem
