@@ -12,7 +12,7 @@
 [![Vercel](https://img.shields.io/badge/Deploy-Vercel-black?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-[Acessar Aplicação](https://simop.vercel.app) • [Estrutura do Banco](#-arquitetura-do-banco-de-dados) • [Engenharia & Arquitetura](#-arquitetura-e-engenharia-de-software) • [Instalação](#-instalação-e-execução-local)
+[Acessar Aplicação](https://simop-flax.vercel.app/) • [Estrutura do Banco](#-arquitetura-do-banco-de-dados) • [Engenharia & Arquitetura](#-arquitetura-e-engenharia-de-software) • [Instalação](#-instalação-e-execução-local)
 
 </div>
 
