@@ -18,6 +18,8 @@ import {
   Check,
   X,
   Star,
+  CheckSquare,
+  Square,
 } from "lucide-react";
 import { getSupabase } from "@/lib/supabase";
 import { MemoriaPhoto } from "@/types/memoria";
@@ -60,6 +62,9 @@ export const AdminAcervoManager: React.FC = () => {
 
   // Modal State
   const [photoToDelete, setPhotoToDelete] = useState<MemoriaPhoto | null>(null);
+  const [isBulkDeleteModalOpen, setIsBulkDeleteModalOpen] = useState(false);
+  const [selectedPhotoIds, setSelectedPhotoIds] = useState<string[]>([]);
+  const [isDeletingBulk, setIsDeletingBulk] = useState(false);
 
   // Upload Queue State
   const [queue, setQueue] = useState<UploadQueueItem[]>([]);
@@ -372,6 +377,7 @@ export const AdminAcervoManager: React.FC = () => {
 
       setStatusMessage({ type: "success", text: "Fotografia removida com sucesso!" });
       setPhotos((prev) => prev.filter((p) => p.id !== photo.id));
+      setSelectedPhotoIds((prev) => prev.filter((id) => id !== photo.id));
     } catch (err: any) {
       setStatusMessage({
         type: "error",
@@ -379,6 +385,70 @@ export const AdminAcervoManager: React.FC = () => {
       });
     } finally {
       setDeletingId(null);
+    }
+  };
+
+  // Seleção de múltiplas fotos
+  const toggleSelectPhoto = (id: string) => {
+    setSelectedPhotoIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const toggleSelectAllPhotos = () => {
+    if (selectedPhotoIds.length === photos.length) {
+      setSelectedPhotoIds([]);
+    } else {
+      setSelectedPhotoIds(photos.map((p) => p.id));
+    }
+  };
+
+  const confirmBulkDeletePhotos = async () => {
+    if (selectedPhotoIds.length === 0) return;
+
+    setIsBulkDeleteModalOpen(false);
+    setIsDeletingBulk(true);
+    setStatusMessage(null);
+
+    const supabase = getSupabase();
+    if (!supabase) {
+      setIsDeletingBulk(false);
+      return;
+    }
+
+    try {
+      const photosToDeleteList = photos.filter((p) => selectedPhotoIds.includes(p.id));
+      const storagePaths = photosToDeleteList
+        .map((p) => p.storage_path)
+        .filter((path): path is string => !!path);
+
+      // 1. Excluir do banco
+      const { error: dbError } = await supabase
+        .from("memoria_photos")
+        .delete()
+        .in("id", selectedPhotoIds);
+
+      if (dbError) throw dbError;
+
+      // 2. Excluir do storage
+      if (storagePaths.length > 0) {
+        await supabase.storage.from("memoria-e-eventos").remove(storagePaths);
+      }
+
+      setStatusMessage({
+        type: "success",
+        text: `${selectedPhotoIds.length} fotografia(s) excluída(s) com sucesso!`,
+      });
+
+      setPhotos((prev) => prev.filter((p) => !selectedPhotoIds.includes(p.id)));
+      setSelectedPhotoIds([]);
+    } catch (err: any) {
+      setStatusMessage({
+        type: "error",
+        text: `Erro ao excluir fotografias selecionadas: ${err.message}`,
+      });
+    } finally {
+      setIsDeletingBulk(false);
     }
   };
 
@@ -836,7 +906,7 @@ export const AdminAcervoManager: React.FC = () => {
       {/* 4. LISTAGEM E GERENCIAMENTO DAS FOTOS DO ACERVO                           */}
       {/* ========================================================================= */}
       <section className="space-y-6">
-        <div className="flex items-center justify-between border-b border-stone/60 pb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone/60 pb-3">
           <div className="flex items-center gap-2">
             <Camera className="w-5 h-5 text-gold" />
             <h2 className="font-serif font-bold text-night text-lg sm:text-xl">
@@ -844,14 +914,55 @@ export const AdminAcervoManager: React.FC = () => {
             </h2>
           </div>
 
-          <button
-            onClick={fetchPhotos}
-            disabled={loading}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-ivory border border-stone text-xs font-mono hover:border-gold transition-colors"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
-            <span>Atualizar</span>
-          </button>
+          <div className="flex items-center flex-wrap gap-2">
+            {photos.length > 0 && (
+              <>
+                <button
+                  type="button"
+                  onClick={toggleSelectAllPhotos}
+                  disabled={loading || isDeletingBulk}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-ivory border border-stone text-xs font-mono text-night hover:border-gold transition-colors"
+                >
+                  {selectedPhotoIds.length === photos.length && photos.length > 0 ? (
+                    <>
+                      <CheckSquare className="w-3.5 h-3.5 text-gold" />
+                      <span>Desmarcar Todas</span>
+                    </>
+                  ) : (
+                    <>
+                      <Square className="w-3.5 h-3.5 text-stone-dark" />
+                      <span>Selecionar Todas</span>
+                    </>
+                  )}
+                </button>
+
+                {selectedPhotoIds.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setIsBulkDeleteModalOpen(true)}
+                    disabled={isDeletingBulk}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-mono font-semibold transition-colors shadow-sm disabled:opacity-50"
+                  >
+                    {isDeletingBulk ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <Trash2 className="w-3.5 h-3.5" />
+                    )}
+                    <span>Excluir Selecionadas ({selectedPhotoIds.length})</span>
+                  </button>
+                )}
+              </>
+            )}
+
+            <button
+              onClick={fetchPhotos}
+              disabled={loading || isDeletingBulk}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-ivory border border-stone text-xs font-mono hover:border-gold transition-colors"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
+              <span>Atualizar</span>
+            </button>
+          </div>
         </div>
 
         {loading ? (
@@ -873,11 +984,14 @@ export const AdminAcervoManager: React.FC = () => {
               const url = getPhotoUrl(photo.storage_path);
               const isDeleting = deletingId === photo.id;
               const isFeaturing = featuringId === photo.id;
+              const isSelected = selectedPhotoIds.includes(photo.id);
 
               return (
                 <div
                   key={photo.id}
-                  className="clay-card bg-white border border-stone overflow-hidden flex flex-col justify-between group"
+                  className={`clay-card bg-white border overflow-hidden flex flex-col justify-between group transition-all duration-150 ${
+                    isSelected ? "ring-2 ring-gold border-gold bg-gold/5" : "border-stone"
+                  }`}
                 >
                   <div className="relative aspect-[4/3] w-full bg-stone-200 overflow-hidden">
                     <img
@@ -886,10 +1000,28 @@ export const AdminAcervoManager: React.FC = () => {
                       className="w-full h-full object-cover"
                     />
 
+                    {/* Checkbox de Seleção */}
+                    <button
+                      type="button"
+                      onClick={() => toggleSelectPhoto(photo.id)}
+                      title={isSelected ? "Desmarcar foto" : "Selecionar foto"}
+                      className={`absolute top-2 left-2 z-10 p-1 transition-all rounded-none border shadow-sm ${
+                        isSelected
+                          ? "bg-gold border-gold text-night"
+                          : "bg-night/70 border-white/30 text-white/80 hover:bg-night hover:text-white"
+                      }`}
+                    >
+                      {isSelected ? (
+                        <CheckSquare className="w-4 h-4 text-night" />
+                      ) : (
+                        <Square className="w-4 h-4" />
+                      )}
+                    </button>
+
                     {/* Botão de estrela — destaque */}
                     <button
                       onClick={() => handleToggleFeatured(photo)}
-                      disabled={isFeaturing || !!featuringId}
+                      disabled={isFeaturing || !!featuringId || isDeletingBulk}
                       title={photo.is_featured ? "Remover destaque" : "Marcar como destaque"}
                       className={`absolute top-2 right-2 p-1.5 border transition-all duration-200 disabled:opacity-60 ${
                         photo.is_featured
@@ -908,7 +1040,7 @@ export const AdminAcervoManager: React.FC = () => {
                     </button>
 
                     {photo.is_featured && (
-                      <span className="absolute top-2 left-2 px-2 py-0.5 bg-gold text-night text-[9px] font-bold uppercase tracking-wider font-mono">
+                      <span className="absolute bottom-2 left-2 px-2 py-0.5 bg-gold text-night text-[9px] font-bold uppercase tracking-wider font-mono shadow-sm">
                         Destaque
                       </span>
                     )}
@@ -934,7 +1066,7 @@ export const AdminAcervoManager: React.FC = () => {
                     <div className="pt-2 border-t border-stone/50 flex justify-end">
                       <button
                         onClick={() => requestDeletePhoto(photo)}
-                        disabled={isDeleting}
+                        disabled={isDeleting || isDeletingBulk}
                         className="inline-flex items-center gap-1 text-[11px] font-mono text-red-600 hover:text-red-800 hover:underline disabled:opacity-50"
                       >
                         {isDeleting ? (
@@ -961,6 +1093,15 @@ export const AdminAcervoManager: React.FC = () => {
         confirmText="Excluir"
         onConfirm={confirmDeletePhoto}
         onCancel={() => setPhotoToDelete(null)}
+      />
+
+      <ConfirmDialog
+        isOpen={isBulkDeleteModalOpen}
+        title="Excluir Fotografias Selecionadas"
+        message={`Tem certeza que deseja excluir as ${selectedPhotoIds.length} fotografias selecionadas do acervo? Esta ação não pode ser desfeita e removerá os arquivos permanentemente.`}
+        confirmText={`Excluir ${selectedPhotoIds.length} Fotos`}
+        onConfirm={confirmBulkDeletePhotos}
+        onCancel={() => setIsBulkDeleteModalOpen(false)}
       />
     </div>
   );

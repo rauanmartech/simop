@@ -18,6 +18,8 @@ import {
   ArrowRight,
   Check,
   X,
+  CheckSquare,
+  Square,
 } from "lucide-react";
 import { getSupabase } from "@/lib/supabase";
 import { MemoriaEventEdition, MemoriaEventType, MemoriaPhoto } from "@/types/memoria";
@@ -103,6 +105,9 @@ export const AdminEventManager: React.FC<AdminEventManagerProps> = ({
 
   // Modal State
   const [photoToDelete, setPhotoToDelete] = useState<MemoriaPhoto | null>(null);
+  const [isBulkDeleteModalOpen, setIsBulkDeleteModalOpen] = useState(false);
+  const [selectedPhotoIds, setSelectedPhotoIds] = useState<string[]>([]);
+  const [isDeletingBulk, setIsDeletingBulk] = useState(false);
   const [editionToDelete, setEditionToDelete] = useState<MemoriaEventEdition | null>(null);
   const [isDeletingEdition, setIsDeletingEdition] = useState(false);
 
@@ -161,6 +166,7 @@ export const AdminEventManager: React.FC<AdminEventManagerProps> = ({
     setIsCurrent(Boolean(edition.is_current));
     setIsPublished(edition.is_published);
     setQueue([]);
+    setSelectedPhotoIds([]);
     fetchPhotos(edition.id);
   };
 
@@ -176,6 +182,7 @@ export const AdminEventManager: React.FC<AdminEventManagerProps> = ({
     setIsPublished(true);
     setPhotos([]);
     setQueue([]);
+    setSelectedPhotoIds([]);
   };
 
   // ---------------------------------------------------------------------------
@@ -415,11 +422,76 @@ export const AdminEventManager: React.FC<AdminEventManagerProps> = ({
         await supabase.storage.from("memoria-e-eventos").remove([photo.storage_path]);
       }
       setPhotos((prev) => prev.filter((p) => p.id !== photo.id));
+      setSelectedPhotoIds((prev) => prev.filter((id) => id !== photo.id));
       setStatusMessage({ type: "success", text: "Foto excluída com sucesso!" });
     } catch (err: any) {
       setStatusMessage({ type: "error", text: `Erro ao excluir: ${err.message}` });
     } finally {
       setDeletingPhotoId(null);
+    }
+  };
+
+  // --- Multi-select & Bulk Delete photos ---
+  const toggleSelectPhoto = (id: string) => {
+    setSelectedPhotoIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const toggleSelectAllPhotos = () => {
+    if (selectedPhotoIds.length === photos.length) {
+      setSelectedPhotoIds([]);
+    } else {
+      setSelectedPhotoIds(photos.map((p) => p.id));
+    }
+  };
+
+  const confirmBulkDeletePhotos = async () => {
+    if (selectedPhotoIds.length === 0) return;
+
+    setIsBulkDeleteModalOpen(false);
+    setIsDeletingBulk(true);
+    setStatusMessage(null);
+
+    const supabase = getSupabase();
+    if (!supabase) {
+      setIsDeletingBulk(false);
+      return;
+    }
+
+    try {
+      const photosToDeleteList = photos.filter((p) => selectedPhotoIds.includes(p.id));
+      const storagePaths = photosToDeleteList
+        .map((p) => p.storage_path)
+        .filter((path): path is string => !!path);
+
+      // 1. Excluir do banco
+      const { error: dbError } = await supabase
+        .from("memoria_photos")
+        .delete()
+        .in("id", selectedPhotoIds);
+
+      if (dbError) throw dbError;
+
+      // 2. Excluir do storage
+      if (storagePaths.length > 0) {
+        await supabase.storage.from("memoria-e-eventos").remove(storagePaths);
+      }
+
+      setStatusMessage({
+        type: "success",
+        text: `${selectedPhotoIds.length} fotografia(s) excluída(s) com sucesso da edição!`,
+      });
+
+      setPhotos((prev) => prev.filter((p) => !selectedPhotoIds.includes(p.id)));
+      setSelectedPhotoIds([]);
+    } catch (err: any) {
+      setStatusMessage({
+        type: "error",
+        text: `Erro ao excluir fotografias selecionadas: ${err.message}`,
+      });
+    } finally {
+      setIsDeletingBulk(false);
     }
   };
 
@@ -1128,7 +1200,7 @@ export const AdminEventManager: React.FC<AdminEventManagerProps> = ({
           {/* 3C. GRID DE FOTOS EXISTENTES DA EDIÇÃO                            */}
           {/* ----------------------------------------------------------------- */}
           <div className="space-y-4">
-            <div className="flex items-center justify-between border-b border-stone/60 pb-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone/60 pb-3">
               <div className="flex items-center gap-2">
                 <Camera className="w-5 h-5 text-gold" />
                 <h3 className="font-serif font-bold text-night text-base sm:text-lg">
@@ -1136,13 +1208,49 @@ export const AdminEventManager: React.FC<AdminEventManagerProps> = ({
                 </h3>
               </div>
 
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-stone-dark font-mono hidden sm:block">
-                  As 6 primeiras fotos são exibidas na galeria pública.
-                </span>
+              <div className="flex items-center flex-wrap gap-2">
+                {photos.length > 0 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={toggleSelectAllPhotos}
+                      disabled={loadingPhotos || isDeletingBulk}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-ivory border border-stone text-xs font-mono text-night hover:border-gold transition-colors"
+                    >
+                      {selectedPhotoIds.length === photos.length && photos.length > 0 ? (
+                        <>
+                          <CheckSquare className="w-3.5 h-3.5 text-gold" />
+                          <span>Desmarcar Todas</span>
+                        </>
+                      ) : (
+                        <>
+                          <Square className="w-3.5 h-3.5 text-stone-dark" />
+                          <span>Selecionar Todas</span>
+                        </>
+                      )}
+                    </button>
+
+                    {selectedPhotoIds.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setIsBulkDeleteModalOpen(true)}
+                        disabled={isDeletingBulk}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs font-mono font-semibold transition-colors shadow-sm disabled:opacity-50"
+                      >
+                        {isDeletingBulk ? (
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        ) : (
+                          <Trash2 className="w-3.5 h-3.5" />
+                        )}
+                        <span>Excluir Selecionadas ({selectedPhotoIds.length})</span>
+                      </button>
+                    )}
+                  </>
+                )}
+
                 <button
                   onClick={() => fetchPhotos(selectedEditionId)}
-                  disabled={loadingPhotos}
+                  disabled={loadingPhotos || isDeletingBulk}
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-ivory border border-stone text-xs font-mono hover:border-gold transition-colors"
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${loadingPhotos ? "animate-spin" : ""}`} />
@@ -1170,12 +1278,17 @@ export const AdminEventManager: React.FC<AdminEventManagerProps> = ({
                   const url = getPhotoUrl(photo.storage_path);
                   const isDeleting = deletingPhotoId === photo.id;
                   const isFirst6 = idx < 6;
+                  const isSelected = selectedPhotoIds.includes(photo.id);
 
                   return (
                     <div
                       key={photo.id}
-                      className={`clay-card bg-white overflow-hidden flex flex-col justify-between border ${
-                        isFirst6 ? "border-gold/40" : "border-stone"
+                      className={`clay-card bg-white overflow-hidden flex flex-col justify-between border transition-all duration-150 ${
+                        isSelected
+                          ? "ring-2 ring-gold border-gold bg-gold/5"
+                          : isFirst6
+                          ? "border-gold/40"
+                          : "border-stone"
                       }`}
                     >
                       <div className="relative aspect-[4/3] w-full bg-stone-200 overflow-hidden">
@@ -1184,6 +1297,25 @@ export const AdminEventManager: React.FC<AdminEventManagerProps> = ({
                           alt={photo.caption || `Foto ${idx + 1}`}
                           className="w-full h-full object-cover"
                         />
+
+                        {/* Checkbox de Seleção */}
+                        <button
+                          type="button"
+                          onClick={() => toggleSelectPhoto(photo.id)}
+                          title={isSelected ? "Desmarcar foto" : "Selecionar foto"}
+                          className={`absolute top-1 right-1 z-10 p-1 transition-all rounded-none border shadow-sm ${
+                            isSelected
+                              ? "bg-gold border-gold text-night"
+                              : "bg-night/70 border-white/30 text-white/80 hover:bg-night hover:text-white"
+                          }`}
+                        >
+                          {isSelected ? (
+                            <CheckSquare className="w-3.5 h-3.5 text-night" />
+                          ) : (
+                            <Square className="w-3.5 h-3.5" />
+                          )}
+                        </button>
+
                         <span
                           className={`absolute top-1 left-1 px-1.5 py-0.5 text-[9px] font-mono font-bold ${
                             isFirst6
@@ -1207,7 +1339,7 @@ export const AdminEventManager: React.FC<AdminEventManagerProps> = ({
                         <div className="flex justify-end pt-1 border-t border-stone/40">
                           <button
                             onClick={() => requestDeletePhoto(photo)}
-                            disabled={isDeleting}
+                            disabled={isDeleting || isDeletingBulk}
                             className="text-red-600 hover:text-red-800 hover:underline inline-flex items-center gap-1 disabled:opacity-50"
                           >
                             {isDeleting ? (
@@ -1236,6 +1368,15 @@ export const AdminEventManager: React.FC<AdminEventManagerProps> = ({
         confirmText="Excluir Foto"
         onConfirm={confirmDeletePhoto}
         onCancel={() => setPhotoToDelete(null)}
+      />
+
+      <ConfirmDialog
+        isOpen={isBulkDeleteModalOpen}
+        title="Excluir Fotografias Selecionadas"
+        message={`Tem certeza que deseja excluir as ${selectedPhotoIds.length} fotografias selecionadas da edição de ${year}? Esta ação não pode ser desfeita e removerá os arquivos permanentemente.`}
+        confirmText={`Excluir ${selectedPhotoIds.length} Fotos`}
+        onConfirm={confirmBulkDeletePhotos}
+        onCancel={() => setIsBulkDeleteModalOpen(false)}
       />
 
       <ConfirmDialog
