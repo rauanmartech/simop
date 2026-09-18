@@ -119,7 +119,7 @@ const legislations: LegislationItem[] = [
       "Diretrizes para condução de reuniões, propostas de parcerias e publicações.",
     ],
     scope: "Governança Interna do SiMOP",
-    linkUrl: "/institucional#conselho-gestor",
+    linkUrl: "https://simopouropreto.com.br/institucional#conselho-gestor",
     linkText: "Ver Conselho Gestor",
   },
   {
@@ -484,13 +484,15 @@ export default function LegislacoesPage() {
               </div>
 
               <div className="pt-2">
-                <Link
-                  href="/institucional"
+                <a
+                  href="https://simopouropreto.com.br/institucional"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-night text-ivory text-xs font-semibold uppercase tracking-wider hover:bg-gold hover:text-night transition-colors"
                 >
                   <Landmark className="w-4 h-4" />
                   <span>Página Institucional SiMOP</span>
-                </Link>
+                </a>
               </div>
             </div>
 
@@ -537,13 +539,15 @@ export default function LegislacoesPage() {
               </p>
 
               <div className="pt-2">
-                <Link
-                  href="/institucional#quem-somos"
+                <a
+                  href="https://simopouropreto.com.br/institucional#quem-somos"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 text-xs text-gold font-semibold uppercase tracking-wider hover:underline"
                 >
                   <span>Consulte o SiMOP</span>
                   <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
+                </a>
               </div>
             </div>
 
