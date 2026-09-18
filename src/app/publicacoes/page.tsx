@@ -22,7 +22,7 @@ export const metadata = {
 export const revalidate = 60; // ISR: revalida a cada 60s
 
 // URL base do Olhar Museu para links externos
-const OLHAR_MUSEU_URL = process.env.NEXT_PUBLIC_OLHAR_MUSEU_URL || "http://localhost:3001";
+const OLHAR_MUSEU_URL = process.env.NEXT_PUBLIC_OLHAR_MUSEU_URL || "https://olharmuseu.simopouropreto.com.br";
 
 function formatDate(dateStr: string): string {
   if (!dateStr) return "";
