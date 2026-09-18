@@ -58,6 +58,12 @@ export const metadata: Metadata = {
       },
     ],
   },
+  facebook: {
+    appId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID || "1000000000000000",
+  },
+  other: {
+    "fb:app_id": process.env.NEXT_PUBLIC_FACEBOOK_APP_ID || "1000000000000000",
+  },
   twitter: {
     card: "summary_large_image",
     title: "SiMOP — Sistema de Museus de Ouro Preto",
