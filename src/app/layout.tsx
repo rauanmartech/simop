@@ -50,6 +50,7 @@ export const metadata: Metadata = {
     images: [
       {
         url: `${siteUrl}/og-image.jpg`,
+        secureUrl: `${siteUrl}/og-image.jpg`,
         width: 1200,
         height: 630,
         type: "image/jpeg",

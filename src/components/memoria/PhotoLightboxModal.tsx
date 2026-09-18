@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
+import { createPortal } from "react-dom";
 import { X, ChevronLeft, ChevronRight, Camera, Tag, User } from "lucide-react";
 import { MemoriaPhoto } from "@/types/memoria";
 import { getPhotoUrl } from "@/lib/memoria";
@@ -18,6 +19,12 @@ export const PhotoLightboxModal: React.FC<PhotoLightboxModalProps> = ({
   onClose,
   onNavigate,
 }) => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const isOpen = currentIndex !== null && Boolean(photos) && photos.length > 0;
 
   const handlePrev = useCallback(() => {
@@ -52,29 +59,30 @@ export const PhotoLightboxModal: React.FC<PhotoLightboxModalProps> = ({
     };
 
     window.addEventListener("keydown", handleKeyDown);
+    const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = originalOverflow || "unset";
     };
   }, [isOpen, onClose, handlePrev, handleNext]);
 
-  if (!isOpen || currentIndex === null) {
+  if (!mounted || !isOpen || currentIndex === null) {
     return null;
   }
 
   const currentPhoto = photos[currentIndex];
   const imageUrl = currentPhoto ? getPhotoUrl(currentPhoto.storage_path) : "";
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 bg-night/95 backdrop-blur-md flex flex-col items-center justify-between p-4 sm:p-6"
+      className="fixed inset-0 z-[9999] bg-night/95 backdrop-blur-md flex flex-col items-center justify-between p-3 sm:p-6 select-none"
       onClick={onClose}
     >
       {/* Top Controls Bar */}
       <div
-        className="w-full max-w-7xl flex items-center justify-between z-50 text-ivory pt-2"
+        className="w-full max-w-7xl flex items-center justify-between z-50 text-ivory pt-1 sm:pt-2"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-2 text-xs font-mono text-gold">
@@ -86,7 +94,7 @@ export const PhotoLightboxModal: React.FC<PhotoLightboxModalProps> = ({
 
         <button
           onClick={onClose}
-          className="p-2.5 rounded-none bg-stone-dark/40 hover:bg-gold hover:text-night text-ivory transition-all duration-200 focus:outline-none border border-stone-dark/50"
+          className="p-2 sm:p-2.5 rounded-none bg-stone-dark/40 hover:bg-gold hover:text-night text-ivory transition-all duration-200 focus:outline-none border border-stone-dark/50"
           aria-label="Fechar visualização"
           title="Fechar (Esc)"
         >
@@ -94,16 +102,16 @@ export const PhotoLightboxModal: React.FC<PhotoLightboxModalProps> = ({
         </button>
       </div>
 
-      {/* Main Image Area with Nav Buttons */}
+      {/* Main Image Area with Natural Aspect Ratio */}
       <div
-        className="relative w-full max-w-6xl flex-1 flex items-center justify-center my-4"
+        className="relative w-full max-w-7xl flex-1 flex items-center justify-center my-2 sm:my-4 px-2 sm:px-12 min-h-0"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Botão Anterior */}
         {photos.length > 1 && (
           <button
             onClick={handlePrev}
-            className="absolute left-2 sm:left-4 z-40 p-3 rounded-none bg-night/80 text-ivory hover:text-gold border border-gold/30 hover:border-gold transition-all duration-200 focus:outline-none backdrop-blur-sm"
+            className="absolute left-2 sm:left-4 z-50 p-2.5 sm:p-3.5 rounded-none bg-night/80 text-ivory hover:text-gold border border-gold/30 hover:border-gold transition-all duration-200 focus:outline-none backdrop-blur-sm shadow-xl"
             aria-label="Fotografia anterior"
             title="Anterior (seta esquerda)"
           >
@@ -111,13 +119,13 @@ export const PhotoLightboxModal: React.FC<PhotoLightboxModalProps> = ({
           </button>
         )}
 
-        {/* Imagem Principal */}
-        <div className="max-w-full max-h-[72vh] flex items-center justify-center overflow-hidden">
+        {/* Container da Imagem que Respeita as Proporções Reais */}
+        <div className="flex items-center justify-center max-w-full max-h-[75vh] min-h-0 overflow-hidden">
           {imageUrl ? (
             <img
               src={imageUrl}
               alt={currentPhoto.caption || currentPhoto.reference_code || "Fotografia do acervo"}
-              className="max-w-full max-h-[72vh] object-contain shadow-2xl border border-stone-dark/30"
+              className="w-auto h-auto max-w-[88vw] max-h-[74vh] object-contain shadow-2xl border border-stone-dark/40 transition-all duration-300"
             />
           ) : (
             <div className="p-12 text-stone-dark font-mono text-sm">Imagem indisponível</div>
@@ -128,7 +136,7 @@ export const PhotoLightboxModal: React.FC<PhotoLightboxModalProps> = ({
         {photos.length > 1 && (
           <button
             onClick={handleNext}
-            className="absolute right-2 sm:right-4 z-40 p-3 rounded-none bg-night/80 text-ivory hover:text-gold border border-gold/30 hover:border-gold transition-all duration-200 focus:outline-none backdrop-blur-sm"
+            className="absolute right-2 sm:right-4 z-50 p-2.5 sm:p-3.5 rounded-none bg-night/80 text-ivory hover:text-gold border border-gold/30 hover:border-gold transition-all duration-200 focus:outline-none backdrop-blur-sm shadow-xl"
             aria-label="Próxima fotografia"
             title="Próxima (seta direita)"
           >
@@ -162,6 +170,7 @@ export const PhotoLightboxModal: React.FC<PhotoLightboxModalProps> = ({
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
