@@ -5,8 +5,7 @@ function getSupabase() {
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
-    { db: { schema: "editorial" } }
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
   );
 }
 
@@ -58,11 +57,7 @@ const POST_SELECT = `
 
 function resolveImageUrl(imgRow: any): string {
   if (!imgRow?.path) return "";
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
-  );
+  const supabase = getSupabase();
   return (
     supabase.storage
       .from(imgRow.bucket || "olhar-museu")
@@ -103,22 +98,27 @@ function mapPost(row: any): OlharMuseuPost {
 
 export class OlharMuseuService {
   /**
-   * Retorna a notícia em destaque (featured_position = 1)
+   * Retorna a notícia em destaque (featured = true e menor featured_position)
    */
   static async getFeaturedPost(): Promise<OlharMuseuPost | null> {
     try {
       const supabase = getSupabase();
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("posts")
         .select(POST_SELECT)
         .eq("status", "PUBLISHED")
         .eq("featured", true)
-        .eq("featured_position", 1)
+        .order("featured_position", { ascending: true, nullsFirst: false })
+        .limit(1)
         .maybeSingle();
+
+      if (error) {
+        console.error("Erro ao buscar notícia em destaque:", error);
+      }
 
       if (!data) {
         // Fallback: primeira notícia publicada mais recente
-        const { data: fallback } = await supabase
+        const { data: fallback, error: fallbackErr } = await supabase
           .from("posts")
           .select(POST_SELECT)
           .eq("status", "PUBLISHED")
@@ -126,11 +126,16 @@ export class OlharMuseuService {
           .limit(1)
           .maybeSingle();
 
+        if (fallbackErr) {
+          console.error("Erro ao buscar notícia fallback em destaque:", fallbackErr);
+        }
+
         return fallback ? mapPost(fallback) : null;
       }
 
       return mapPost(data);
-    } catch {
+    } catch (err) {
+      console.error("Exceção ao buscar notícia em destaque:", err);
       return null;
     }
   }
@@ -144,18 +149,24 @@ export class OlharMuseuService {
   ): Promise<OlharMuseuPost[]> {
     try {
       const supabase = getSupabase();
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from("posts")
         .select(POST_SELECT)
         .eq("status", "PUBLISHED")
         .order("published_at", { ascending: false })
         .limit(limit + excludeIds.length);
 
+      if (error) {
+        console.error("Erro ao buscar últimas notícias:", error);
+        return [];
+      }
+
       return (data || [])
         .map(mapPost)
         .filter((p) => !excludeIds.includes(p.id))
         .slice(0, limit);
-    } catch {
+    } catch (err) {
+      console.error("Exceção ao buscar últimas notícias:", err);
       return [];
     }
   }
