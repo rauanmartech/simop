@@ -175,25 +175,25 @@ export default async function HomePage() {
                   </div>
                   
                   {/* Avatares com Fotos Reais */}
-                  <div className="flex -space-x-2.5" title="Ranielle Figueiredo, Matheus Bernardes e Stella Ker">
-                    <div className="w-9 h-9 rounded-full border-2 border-night overflow-hidden ring-1 ring-gold/40 shadow-md bg-stone-dark relative group-hover:ring-gold transition-all" title="Ranielle Menezes de Figueiredo — Coordenadora Executiva">
+                  <div className="flex -space-x-2.5" title="Ranielle de Figueiredo, Matheus Bernardes e Stella Ker">
+                    <div className="w-9 h-9 rounded-full border-2 border-night overflow-hidden ring-1 ring-gold/40 shadow-md bg-stone-dark relative group-hover:ring-gold transition-all" title="Ranielle de Figueiredo — Coordenadora Executiva">
                       <img
                         src="/images/sobre/ranielle-figueiredo.webp"
-                        alt="Ranielle Menezes de Figueiredo"
+                        alt="Ranielle de Figueiredo"
                         className="w-full h-full object-cover object-top"
                       />
                     </div>
-                    <div className="w-9 h-9 rounded-full border-2 border-night overflow-hidden ring-1 ring-gold/40 shadow-md bg-stone-dark relative group-hover:ring-gold transition-all" title="Matheus José Mendes Bernardes — Coordenador Executivo">
+                    <div className="w-9 h-9 rounded-full border-2 border-night overflow-hidden ring-1 ring-gold/40 shadow-md bg-stone-dark relative group-hover:ring-gold transition-all" title="Matheus Bernardes — Coordenador Executivo">
                       <img
                         src="/images/sobre/matheus-bernardes.webp"
-                        alt="Matheus José Mendes Bernardes"
+                        alt="Matheus Bernardes"
                         className="w-full h-full object-cover object-top"
                       />
                     </div>
-                    <div className="w-9 h-9 rounded-full border-2 border-night overflow-hidden ring-1 ring-gold/40 shadow-md bg-stone-dark relative group-hover:ring-gold transition-all" title="Stella de Abreu Alves Ker — Monitora e Equipe Técnica">
+                    <div className="w-9 h-9 rounded-full border-2 border-night overflow-hidden ring-1 ring-gold/40 shadow-md bg-stone-dark relative group-hover:ring-gold transition-all" title="Stella Ker — Monitora e Equipe Técnica">
                       <img
                         src="/images/sobre/stella-ker.webp"
-                        alt="Stella de Abreu Alves Ker"
+                        alt="Stella Ker"
                         className="w-full h-full object-cover object-top"
                       />
                     </div>

@@ -34,12 +34,7 @@ export default function InstitucionalPage() {
       icon: GraduationCap,
       description: "Formação técnica, pesquisa acadêmica e fomento à museologia.",
     },
-    {
-      name: "Rede de Museus e Acervos da UFOP",
-      category: "Universidade",
-      icon: GraduationCap,
-      description: "Articulação dos espaços museais e coleções universitárias.",
-    },
+
     {
       name: "Museu de Ciência e Técnica da Escola de Minas",
       category: "Universidade / Ciência",
@@ -112,12 +107,7 @@ export default function InstitucionalPage() {
       icon: Landmark,
       description: "Paisagem cultural, memória viva e território ecológico.",
     },
-    {
-      name: "Museu do Parque Estadual do Itacolomi",
-      category: "Estadual / Natureza",
-      icon: Landmark,
-      description: "História natural, botânica e ocupação da serra do Itacolomi.",
-    },
+
     {
       name: "Secretarias Municipais de Cultura, Turismo e/ou Patrimônio",
       category: "Poder Executivo Municipal",
@@ -329,12 +319,12 @@ export default function InstitucionalPage() {
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     
-                    {/* Ranielle Menezes de Figueiredo */}
+                    {/* Ranielle de Figueiredo */}
                     <div className="clay-card p-6 bg-white flex flex-col items-center text-center group hover:border-gold transition-all duration-300">
                       <div className="w-36 h-36 mb-5 overflow-hidden border-2 border-gold/40 relative shadow-md bg-stone-light/20">
                         <img
                           src="/images/sobre/ranielle-figueiredo.webp"
-                          alt="Ranielle Menezes de Figueiredo — Coordenadora Executiva"
+                          alt="Ranielle de Figueiredo — Coordenadora Executiva"
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           loading="lazy"
                         />
@@ -343,19 +333,19 @@ export default function InstitucionalPage() {
                         Coordenação Executiva
                       </span>
                       <h4 className="font-serif font-bold text-night text-lg mb-2">
-                        Ranielle Menezes de Figueiredo
+                        Ranielle de Figueiredo
                       </h4>
                       <p className="text-xs text-blue-deep leading-relaxed mt-auto pt-2 border-t border-stone/50 w-full">
                         Representante do <strong>Museu de Ciência e Técnica da Escola de Minas</strong> da Universidade Federal de Ouro Preto (UFOP).
                       </p>
                     </div>
 
-                    {/* Matheus José Mendes Bernardes */}
+                    {/* Matheus Bernardes */}
                     <div className="clay-card p-6 bg-white flex flex-col items-center text-center group hover:border-gold transition-all duration-300">
                       <div className="w-36 h-36 mb-5 overflow-hidden border-2 border-gold/40 relative shadow-md bg-stone-light/20">
                         <img
                           src="/images/sobre/matheus-bernardes.webp"
-                          alt="Matheus José Mendes Bernardes — Coordenador Executivo"
+                          alt="Matheus Bernardes — Coordenador Executivo"
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           loading="lazy"
                         />
@@ -364,7 +354,7 @@ export default function InstitucionalPage() {
                         Coordenação Executiva
                       </span>
                       <h4 className="font-serif font-bold text-night text-lg mb-2">
-                        Matheus José Mendes Bernardes
+                        Matheus Bernardes
                       </h4>
                       <p className="text-xs text-blue-deep leading-relaxed mt-auto pt-2 border-t border-stone/50 w-full">
                         Representante do <strong>Museu Casa dos Contos</strong>.
@@ -392,7 +382,7 @@ export default function InstitucionalPage() {
                     <div className="w-40 h-40 sm:w-48 sm:h-48 overflow-hidden border-2 border-gold/40 shadow-lg relative bg-stone-light/20">
                       <img
                         src="/images/sobre/stella-ker.webp"
-                        alt="Stella de Abreu Alves Ker — Monitora do SiMOP"
+                        alt="Stella Ker — Monitora do SiMOP"
                         className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                         loading="lazy"
                       />
@@ -407,7 +397,7 @@ export default function InstitucionalPage() {
                     </div>
 
                     <h3 className="font-serif font-bold text-night text-2xl">
-                      Stella de Abreu Alves Ker
+                      Stella Ker
                     </h3>
 
                     <p className="text-sm font-semibold text-gold uppercase tracking-wider">
