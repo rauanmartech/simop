@@ -15,7 +15,7 @@ export const RelatedMuseums: React.FC<RelatedMuseumsProps> = ({ museums }) => {
       <SectionHeader
         eyebrow="Explore Mais"
         title="Continue sua visita"
-        subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Explore outros espaços culturais e descubra diferentes perspectivas sobre a história e a cultura de Ouro Preto."
+        subtitle="Explore outros espaços culturais da rede e descubra diferentes perspectivas sobre a história e o patrimônio de Ouro Preto."
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

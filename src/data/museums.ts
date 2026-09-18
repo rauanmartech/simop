@@ -14,7 +14,7 @@ export const museums: Museum[] = [
     resumo: "O Museu da Inconfidência – MIN é uma instituição pública, situada em Ouro Preto, Minas Gerais, componente da estrutura organizacional do IBRAM – Instituto Brasileiro de Museus.",
     descricao_curta: "Preservação da memória política e sociocultural mineira dos séculos XVIII e XIX, componente do IBRAM.",
     sobre: "O Museu da Inconfidência – MIN é uma instituição pública, situada em Ouro Preto, Minas Gerais, componente da estrutura organizacional do IBRAM – Instituto Brasileiro de Museus. De inestimável valor histórico, cultural e artístico, o acervo do MIN mantém em seu resguardo objetos e arquivos de valor incalculável para a memória não só de Ouro Preto, mas para o Estado de Minas Gerais e a própria história e formação do Brasil. Essa especificidade de coleção faz com que o acervo seja intensamente pesquisado por estudiosos de todos os estados brasileiros e de várias partes do mundo.",
-    historia: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. História de fundação e contexto do Museu da Inconfidência.",
+    historia: "O Museu da Inconfidência foi criado em 1938 e inaugurado em 1944 para homenagear os inconfidentes mineiros e resguardar a memória da Conjuração Mineira de 1789, constituindo uma das instituições culturais mais emblemáticas do Brasil.",
     acervo: "Constituído de um edifício sede — a antiga Casa de Câmara e Cadeia de Vila Rica —, o acervo do Museu é formado por cerca de 7.000 (sete mil) objetos em exposição, que retratam as mais variadas esferas da vida sociocultural e política mineira dos séculos XVIII e XIX. Os objetos estão intimamente relacionados à formação da sociedade brasileira, tais como: sistemas construtivos, transporte, objetos de uso cotidiano e religioso, indumentária, mobiliário, objetos de arte, ornamentação, proteção e guerra.\n\nSob a guarda do Museu, o Arquivo Histórico, localizado na Casa Setecentista do Pilar, é responsável pela guarda e conservação de cerca de mais de 40.000 (quarenta mil) documentos de significativo valor histórico, entre eles pode-se destacar: desenhos do Mestre Aleijadinho, inventários, testamentos, ações cíveis, decisões judiciais, documentos cartoriais, documentos relativos a crimes. Uma coleção com cerca de 5.000 (cinco mil) partituras de música colonial mineira, entre elas, a Coleção Curt Lange, reconhecida pela Unesco no Programa \"Memória do Mundo\". E por fim, uma biblioteca mineiriana doada pelo historiador Tarquinío Oliveira com cerca de 20.000 (vinte mil) volumes, com obras raras e primeiras edições.",
     destaques: [
       "Casa de Câmara e Cadeia de Vila Rica",
@@ -24,7 +24,7 @@ export const museums: Museum[] = [
     ],
     visitacao: {
       horario: "Terça a quinta: 10h às 18h (acesso até às 17h)\nSexta e sábado: 10h às 20h (acesso até às 19h)",
-      entrada: "Lorem ipsum",
+      entrada: "Consulte a instituição para informações atualizadas sobre ingressos, gratuidades e isenções.",
       duracao_visita: "Aproximadamente 1 a 2 horas"
     },
     localizacao: {
@@ -35,9 +35,9 @@ export const museums: Museum[] = [
       latitude: -20.3856,
       longitude: -43.5032
     },
-    acessibilidade: "Lorem ipsum dolor sit amet.",
+    acessibilidade: "Consulte a instituição para informações sobre recursos de acessibilidade e suporte à visitação.",
     contato: {
-      telefone: "Lorem ipsum",
+      telefone: "Consulte no local",
       email: "mdinc@museus.gov.br",
       website: "https://museudainconfidencia.museus.gov.br",
       instagram: "@museudainconfidencia"
@@ -69,7 +69,7 @@ export const museums: Museum[] = [
     destaques: ["Centro de Estudos do Ciclo do Ouro", "Acervo de numismática", "Mobiliário dos séculos XVIII e XIX", "Casarão histórico"],
     visitacao: {
       horario: "Terça à Sábado das 10h às 18h",
-      entrada: "Lorem ipsum",
+      entrada: "Consulte a instituição para informações atualizadas sobre ingressos, gratuidades e isenções.",
       duracao_visita: "Aproximadamente 1 hora"
     },
     localizacao: {
@@ -80,9 +80,9 @@ export const museums: Museum[] = [
       latitude: -20.3856,
       longitude: -43.5032
     },
-    acessibilidade: "Lorem ipsum",
+    acessibilidade: "Consulte a instituição para informações sobre recursos de acessibilidade e suporte à visitação.",
     contato: {
-      telefone: "Lorem ipsum",
+      telefone: "Consulte no local",
       email: "casa.dos.contos@economia.gov.br",
       website: "https://www.gov.br",
       instagram: "@museucasadoscontos"
@@ -219,7 +219,7 @@ export const museums: Museum[] = [
       latitude: -20.3854,
       longitude: -43.5028
     },
-    acessibilidade: "Lorem ipsum",
+    acessibilidade: "Consulte a instituição para informações sobre recursos de acessibilidade e suporte à visitação.",
     contato: {
       telefone: "+55 [31] 3551-5369",
       email: "info@museudooratorio.org.br",
@@ -272,7 +272,7 @@ export const museums: Museum[] = [
       latitude: -20.3856,
       longitude: -43.5032
     },
-    acessibilidade: "Lorem ipsum",
+    acessibilidade: "Consulte a instituição para informações sobre recursos de acessibilidade e suporte à visitação.",
     contato: {
       telefone: "+55 [31] 98467-1198",
       email: "museu.guignard@gmail.com",
@@ -352,7 +352,7 @@ export const museums: Museum[] = [
     destaques: ["Obras em marfim, prata e madeira", "Antigo Asilo São Vicente de Paulo", "Síntese global da arte barroca", "Coleção construída ao longo de 60 anos"],
     visitacao: {
       horario: "Quinta a segunda: 10h às 18h. Quarta-feira: 13h às 21h.",
-      entrada: "Lorem ipsum",
+      entrada: "Consulte a instituição para informações atualizadas sobre ingressos, gratuidades e isenções.",
       duracao_visita: "Aproximadamente 1 hora"
     },
     localizacao: {
@@ -363,7 +363,7 @@ export const museums: Museum[] = [
       latitude: -20.3831,
       longitude: -43.5042
     },
-    acessibilidade: "Lorem ipsum",
+    acessibilidade: "Consulte a instituição para informações sobre recursos de acessibilidade e suporte à visitação.",
     contato: {
       telefone: "+55 (31) 3350-5246",
       email: "contato@museuboulieu.org.br",

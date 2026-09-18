@@ -12,6 +12,10 @@ export const LocationSection: React.FC<LocationSectionProps> = ({
   localizacao,
   nomeMuseu,
 }) => {
+  const mapQuery = encodeURIComponent(`${nomeMuseu}, ${localizacao.endereco}, ${localizacao.cidade} - ${localizacao.estado}`);
+  const googleMapsUrl = `https://maps.google.com/?q=${mapQuery}`;
+  const mapEmbedUrl = `https://maps.google.com/maps?q=${mapQuery}&t=&z=16&ie=UTF8&iwloc=&output=embed`;
+
   return (
     <section id="localizacao" className="py-12 border-t border-stone/60">
       <SectionHeader
@@ -46,27 +50,27 @@ export const LocationSection: React.FC<LocationSectionProps> = ({
           </div>
         </div>
 
-        {/* Map Representation Card */}
-        <div className="lg:col-span-2 clay-card overflow-hidden relative min-h-[300px] flex items-center justify-center bg-stone/20 p-8 text-center">
-          <div className="relative z-10 max-w-md space-y-4">
-            <div className="w-14 h-14 rounded-none bg-night text-gold flex items-center justify-center mx-auto shadow-lg border border-gold/40">
-              <Navigation className="w-7 h-7" />
+        {/* Map Embed Card */}
+        <div className="lg:col-span-2 clay-card overflow-hidden relative min-h-[350px] flex flex-col justify-between bg-stone/10 border border-stone p-0 group">
+          <div className="w-full h-[320px] sm:h-[380px] lg:h-full min-h-[300px] relative">
+            <iframe
+              title={`Mapa de localização - ${nomeMuseu}`}
+              src={mapEmbedUrl}
+              className="w-full h-full border-0 grayscale opacity-90 hover:grayscale-0 hover:opacity-100 transition-all duration-500"
+              loading="lazy"
+              allowFullScreen
+            />
+            <div className="absolute top-3 right-3 z-10">
+              <a
+                href={googleMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-night/90 text-gold text-xs font-bold uppercase tracking-wider border border-gold/40 hover:bg-gold hover:text-night transition-all duration-200 shadow-md backdrop-blur-sm"
+              >
+                <span>Abrir no Google Maps</span>
+                <Navigation className="w-3.5 h-3.5" />
+              </a>
             </div>
-            <h4 className="font-serif font-bold text-night text-lg">Mapa de Ouro Preto</h4>
-            <p className="text-sm text-blue-deep leading-relaxed">
-              {localizacao.endereco}, {localizacao.bairro}, {localizacao.cidade} - {localizacao.estado}
-            </p>
-            <a
-              href={`https://maps.google.com/?q=${encodeURIComponent(
-                `${nomeMuseu}, ${localizacao.endereco}, ${localizacao.cidade}`
-              )}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-none bg-gold text-night text-xs uppercase tracking-wider font-bold hover:bg-gold-light transition-colors border border-transparent hover:border-night"
-            >
-              <span>Abrir no Google Maps</span>
-              <Navigation className="w-3.5 h-3.5" />
-            </a>
           </div>
         </div>
       </div>

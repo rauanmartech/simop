@@ -87,22 +87,70 @@ export const MuseumInfo: React.FC<MuseumInfoProps> = ({
         </div>
 
         <div className="flex flex-wrap items-center gap-6 text-xs text-stone">
-          <div className="flex items-center gap-2">
-            <Phone className="w-4 h-4 text-gold shrink-0" />
-            <span>{contato.telefone}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Mail className="w-4 h-4 text-gold shrink-0" />
-            <span>{contato.email}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Globe className="w-4 h-4 text-gold shrink-0" />
-            <span>{contato.website}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Instagram className="w-4 h-4 text-gold shrink-0" />
-            <span>{contato.instagram}</span>
-          </div>
+          {contato.telefone && (
+            <div className="flex items-center gap-2">
+              <Phone className="w-4 h-4 text-gold shrink-0" />
+              {/\d{8,}/.test(contato.telefone) ? (
+                <a
+                  href={`tel:${contato.telefone.replace(/[^\d+]/g, "")}`}
+                  className="hover:text-gold transition-colors underline-offset-4 hover:underline"
+                >
+                  {contato.telefone}
+                </a>
+              ) : (
+                <span>{contato.telefone}</span>
+              )}
+            </div>
+          )}
+          {contato.email && (
+            <div className="flex items-center gap-2">
+              <Mail className="w-4 h-4 text-gold shrink-0" />
+              {contato.email.includes("@") ? (
+                <a
+                  href={`mailto:${contato.email}`}
+                  className="hover:text-gold transition-colors underline-offset-4 hover:underline"
+                >
+                  {contato.email}
+                </a>
+              ) : (
+                <span>{contato.email}</span>
+              )}
+            </div>
+          )}
+          {contato.website && (
+            <div className="flex items-center gap-2">
+              <Globe className="w-4 h-4 text-gold shrink-0" />
+              {contato.website.includes(".") ? (
+                <a
+                  href={contato.website.startsWith("http") ? contato.website : `https://${contato.website}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-gold transition-colors underline-offset-4 hover:underline"
+                >
+                  {contato.website.replace(/^https?:\/\/(www\.)?/, "")}
+                </a>
+              ) : (
+                <span>{contato.website}</span>
+              )}
+            </div>
+          )}
+          {contato.instagram && (
+            <div className="flex items-center gap-2">
+              <Instagram className="w-4 h-4 text-gold shrink-0" />
+              {contato.instagram.startsWith("@") || contato.instagram.includes("instagram.com") ? (
+                <a
+                  href={`https://instagram.com/${contato.instagram.replace(/^@/, "").replace(/^https?:\/\/(www\.)?instagram\.com\//, "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-gold transition-colors underline-offset-4 hover:underline"
+                >
+                  {contato.instagram.startsWith("@") ? contato.instagram : `@${contato.instagram}`}
+                </a>
+              ) : (
+                <span>{contato.instagram}</span>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </section>

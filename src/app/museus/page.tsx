@@ -34,7 +34,7 @@ function MuseumCatalogContent() {
       <SectionHeader
         eyebrow="Catálogo Completo"
         title="Museus de Ouro Preto"
-        subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Explore museus, coleções, espaços históricos e instituições dedicadas à preservação da memória cultural de Ouro Preto."
+        subtitle="Conheça a rede de museus de Ouro Preto. Explore coleções, espaços históricos e instituições dedicadas à salvaguarda da memória e do patrimônio cultural."
       />
 
       {/* Search Bar */}

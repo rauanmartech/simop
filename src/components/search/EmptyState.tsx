@@ -11,7 +11,7 @@ interface EmptyStateProps {
 export const EmptyState: React.FC<EmptyStateProps> = ({
   onResetFilters,
   title = "Nenhum museu encontrado",
-  description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Tente refinar sua busca ou remover os filtros aplicados.",
+  description = "Nenhum resultado corresponde aos termos da sua busca. Tente refinar suas palavras-chave ou limpar os filtros aplicados.",
 }) => {
   return (
     <div className="clay-card p-12 text-center flex flex-col items-center justify-center my-8 max-w-xl mx-auto">

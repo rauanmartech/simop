@@ -19,8 +19,8 @@ export const ExpandableMuseumCard: React.FC<ExpandableMuseumCardProps> = ({ muse
       onClick={!isOpen ? onClick : undefined}
     >
       {isOpen ? (
-        <div className="flex flex-col w-full">
-          {/* Open State - Exact replica of MuseumCard */}
+        <Link href={`/museus/${museum.slug}`} className="flex flex-col w-full">
+          {/* Open State - Replica of MuseumCard */}
           <div className="relative w-full h-56 md:h-60 overflow-hidden bg-stone/30 shrink-0">
             <img src={museum.imagem_capa} alt={museum.nome} className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
             <div className="absolute inset-0 bg-gradient-to-t from-night/60 via-transparent to-transparent opacity-80" />
@@ -32,11 +32,7 @@ export const ExpandableMuseumCard: React.FC<ExpandableMuseumCardProps> = ({ muse
           <div className="p-6 md:p-8 flex flex-col gap-4">
             <div className="space-y-2">
               <h3 className="font-serif text-xl font-bold text-night group-hover:text-gold transition-colors leading-snug">
-                <Link href={`/museus/${museum.slug}`} className="focus:outline-none block w-full" onClick={(e) => {
-                    if (!isOpen) e.preventDefault();
-                }}>
-                  {museum.nome}
-                </Link>
+                {museum.nome}
               </h3>
 
               <div className="flex items-center gap-1.5 text-xs text-blue-deep font-medium">
@@ -54,16 +50,15 @@ export const ExpandableMuseumCard: React.FC<ExpandableMuseumCardProps> = ({ muse
               <span className="text-xs uppercase tracking-widest font-semibold text-blue-deep group-hover:text-gold transition-colors">
                 Explorar Acervo
               </span>
-              <Link
-                href={`/museus/${museum.slug}`}
+              <div
                 className="w-9 h-9 rounded-none bg-ivory border border-stone flex items-center justify-center text-night group-hover:bg-gold group-hover:border-gold group-hover:text-night transition-all duration-300"
                 aria-label={`Ver detalhes do ${museum.nome}`}
               >
                 <ArrowRight className="w-4 h-4" />
-              </Link>
+              </div>
             </div>
           </div>
-        </div>
+        </Link>
       ) : (
         <div className="flex flex-row items-center w-full bg-white h-28">
           {/* Closed State - Horizontal Layout */}
