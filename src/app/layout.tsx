@@ -16,32 +16,53 @@ const inter = Inter({
   display: "swap",
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://simopouropreto.com.br";
+
 export const metadata: Metadata = {
-  title: "Portal dos Museus de Ouro Preto — Histórias, Memórias e Patrimônio",
+  metadataBase: new URL(siteUrl),
+  title: "SiMOP — Sistema de Museus de Ouro Preto",
   description:
-    "Plataforma institucional e cultural completa dedicada à descoberta, consulta e exploração dos museus e acervos de Ouro Preto, Minas Gerais.",
+    "Sistema de Museus de Ouro Preto — patrimônio, memória e cultura de Ouro Preto.",
   keywords: [
+    "SiMOP",
+    "Sistema de Museus de Ouro Preto",
     "Ouro Preto",
     "Museus",
     "Patrimônio Histórico",
+    "Minas Gerais",
     "Arte Sacra",
     "Inconfidência",
     "Aleijadinho",
-    "Minas Gerais",
+    "Cultura",
   ],
-  authors: [{ name: "Portal dos Museus de Ouro Preto" }],
+  authors: [{ name: "SiMOP — Sistema de Museus de Ouro Preto" }],
+  alternates: {
+    canonical: siteUrl,
+  },
   openGraph: {
-    title: "Portal dos Museus de Ouro Preto",
+    title: "SiMOP — Sistema de Museus de Ouro Preto",
     description:
-      "Histórias, memórias e patrimônios que atravessam séculos. Conheça o acervo dos museus de Ouro Preto.",
-    type: "website",
+      "Sistema de Museus de Ouro Preto — patrimônio, memória e cultura de Ouro Preto.",
+    url: siteUrl,
+    siteName: "SiMOP",
     locale: "pt_BR",
-    siteName: "Portal dos Museus de Ouro Preto",
+    type: "website",
+    images: [
+      {
+        url: `${siteUrl}/og-image.jpg`,
+        width: 1200,
+        height: 630,
+        type: "image/jpeg",
+        alt: "SiMOP — Sistema de Museus de Ouro Preto",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Portal dos Museus de Ouro Preto",
-    description: "Conheça a história e o acervo dos museus de Ouro Preto, Minas Gerais.",
+    title: "SiMOP — Sistema de Museus de Ouro Preto",
+    description:
+      "Sistema de Museus de Ouro Preto — patrimônio, memória e cultura de Ouro Preto.",
+    images: [`${siteUrl}/og-image.jpg`],
   },
   icons: {
     icon: "/favicon.ico",
