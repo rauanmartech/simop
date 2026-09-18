@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search, Menu, X } from "lucide-react";
+import { Search, Menu, X, Home } from "lucide-react";
 
 export const Header: React.FC = () => {
   const pathname = usePathname();
@@ -57,7 +57,18 @@ export const Header: React.FC = () => {
           </nav>
 
           {/* Actions */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-3">
+            <Link
+              href="/"
+              aria-label="Página Inicial"
+              title="Página Inicial"
+              className={`p-2.5 rounded-none border border-stone-dark/40 text-ivory hover:border-gold hover:text-gold transition-colors ${
+                pathname === "/" ? "text-gold border-gold bg-gold/10" : ""
+              }`}
+            >
+              <Home className="w-4 h-4" />
+            </Link>
+
             <Link
               href="/buscar"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-none border border-blue-deep text-ivory text-xs uppercase tracking-wider font-semibold hover:border-gold hover:text-gold transition-colors"
@@ -68,7 +79,18 @@ export const Header: React.FC = () => {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="flex md:hidden items-center gap-3">
+          <div className="flex md:hidden items-center gap-2">
+            <Link
+              href="/"
+              aria-label="Página Inicial"
+              title="Página Inicial"
+              className={`p-2 text-ivory hover:text-gold transition-colors ${
+                pathname === "/" ? "text-gold" : ""
+              }`}
+            >
+              <Home className="w-5 h-5" />
+            </Link>
+
             <Link
               href="/buscar"
               aria-label="Buscar museus"
@@ -92,6 +114,21 @@ export const Header: React.FC = () => {
       {mobileMenuOpen && (
         <div className="md:hidden bg-night/95 backdrop-blur-lg border-b border-stone-dark/40 px-6 py-6 transition-all duration-300 animate-fadeIn">
           <nav className="flex flex-col gap-4" aria-label="Menu Mobile">
+            <Link
+              href="/"
+              onClick={() => setMobileMenuOpen(false)}
+              className={`py-3 text-base font-medium border-b border-stone-dark/20 flex items-center justify-between ${
+                pathname === "/"
+                  ? "text-gold font-bold pl-2 border-l-2 border-l-gold"
+                  : "text-ivory hover:text-gold-light"
+              }`}
+            >
+              <span className="flex items-center gap-2">
+                <Home className="w-4 h-4 text-gold" />
+                Início
+              </span>
+              <span className="text-xs text-stone-dark">→</span>
+            </Link>
             {navLinks.map((link) => (
               <Link
                 key={link.href}
