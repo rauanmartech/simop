@@ -10,19 +10,24 @@ interface MemoriaPhotoCardProps {
   photo: MemoriaPhoto;
   aspectRatio?: string;
   showCaption?: boolean;
+  onClick?: () => void;
 }
 
 export const MemoriaPhotoCard: React.FC<MemoriaPhotoCardProps> = ({
   photo,
   aspectRatio = "aspect-[4/3]",
   showCaption = true,
+  onClick,
 }) => {
   const [hasError, setHasError] = useState(false);
   const imageUrl = getPhotoUrl(photo.storage_path);
 
   return (
     <div
-      className={`clay-card group relative overflow-hidden border border-stone bg-stone-200 transition-all duration-300 hover:border-gold ${aspectRatio}`}
+      onClick={onClick}
+      className={`clay-card group relative overflow-hidden border border-stone bg-stone-200 transition-all duration-300 hover:border-gold ${
+        onClick ? "cursor-pointer" : ""
+      } ${aspectRatio}`}
     >
       {imageUrl && !hasError ? (
         <img

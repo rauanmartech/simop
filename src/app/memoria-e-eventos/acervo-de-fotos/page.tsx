@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import { Camera, ArrowLeft } from "lucide-react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { getAcervoPhotos } from "@/lib/memoria";
-import { MemoriaPhotoCard } from "@/components/memoria/MemoriaPhotoCard";
+import { AcervoPhotosGrid } from "@/components/memoria/AcervoPhotosGrid";
 import { EmptyState } from "@/components/memoria/EmptyState";
 
 export const metadata: Metadata = {
@@ -63,16 +63,7 @@ export default async function AcervoDeFotosPage() {
         />
 
         {photos.length > 0 ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-            {photos.map((photo) => (
-              <MemoriaPhotoCard
-                key={photo.id}
-                photo={photo}
-                aspectRatio="aspect-[4/3]"
-                showCaption={true}
-              />
-            ))}
-          </div>
+          <AcervoPhotosGrid photos={photos} />
         ) : (
           <EmptyState
             title="Nenhuma fotografia encontrada no acervo"

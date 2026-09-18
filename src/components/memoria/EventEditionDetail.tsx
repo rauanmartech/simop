@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
 import {
   Calendar,
@@ -12,6 +14,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { MemoriaEventEdition, MemoriaEventType, MemoriaPhoto } from "@/types/memoria";
 import { EditionsSidebar } from "./EditionsSidebar";
 import { MemoriaPhotoCard } from "./MemoriaPhotoCard";
+import { PhotoLightboxModal } from "./PhotoLightboxModal";
 
 interface EventEditionDetailProps {
   eventType: MemoriaEventType;
@@ -26,6 +29,8 @@ export const EventEditionDetail: React.FC<EventEditionDetailProps> = ({
   allEditions,
   photos,
 }) => {
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
   const eventLabel =
     eventType === "semana_de_museus" ? "Semana de Museus" : "Primavera de Museus";
 
@@ -114,12 +119,13 @@ export const EventEditionDetail: React.FC<EventEditionDetailProps> = ({
 
               {photos.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-                  {photos.map((photo) => (
+                  {photos.map((photo, index) => (
                     <MemoriaPhotoCard
                       key={photo.id}
                       photo={photo}
                       aspectRatio="aspect-[4/3]"
                       showCaption={true}
+                      onClick={() => setLightboxIndex(index)}
                     />
                   ))}
                 </div>
@@ -157,6 +163,14 @@ export const EventEditionDetail: React.FC<EventEditionDetailProps> = ({
 
         </div>
       </div>
+
+      {/* Lightbox Modal */}
+      <PhotoLightboxModal
+        photos={photos}
+        currentIndex={lightboxIndex}
+        onClose={() => setLightboxIndex(null)}
+        onNavigate={(newIndex) => setLightboxIndex(newIndex)}
+      />
     </div>
   );
 };
