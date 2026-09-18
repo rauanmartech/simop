@@ -50,7 +50,7 @@ export const Footer: React.FC = () => {
             <h3 className="font-serif text-ivory text-base font-bold mb-4 uppercase tracking-wider text-gold">
               Navegação
             </h3>
-            <ul className="space-y-2.5 text-sm">
+            <ul className="space-y-2 text-sm">
               <li>
                 <Link href="/" className="hover:text-gold-light transition-colors">
                   Início
@@ -58,17 +58,37 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link href="/museus" className="hover:text-gold-light transition-colors">
-                  Catálogo de Museus
+                  Museus
                 </Link>
               </li>
               <li>
-                <Link href="/buscar" className="hover:text-gold-light transition-colors">
-                  Explorar e Buscar
+                <Link href="/institucional" className="hover:text-gold-light transition-colors">
+                  Institucional
+                </Link>
+              </li>
+              <li>
+                <Link href="/publicacoes" className="hover:text-gold-light transition-colors">
+                  Publicações
+                </Link>
+              </li>
+              <li>
+                <Link href="/legislacoes" className="hover:text-gold-light transition-colors">
+                  Legislações
+                </Link>
+              </li>
+              <li>
+                <Link href="/memoria-e-eventos" className="hover:text-gold-light transition-colors">
+                  Memória e Eventos
                 </Link>
               </li>
               <li>
                 <Link href="/tecnologia" className="hover:text-gold-light transition-colors">
                   Tecnologia
+                </Link>
+              </li>
+              <li>
+                <Link href="/buscar" className="hover:text-gold-light transition-colors">
+                  Buscar no Acervo
                 </Link>
               </li>
             </ul>

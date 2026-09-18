@@ -192,11 +192,19 @@ export default function TecnologiaPage() {
               </div>
             </div>
 
-            {/* Espaço visual para imagem (Placeholder Hero) */}
+            {/* Espaço visual para imagem (Ambiente e Interface) */}
             <div className="lg:col-span-5">
-              <div className="clay-card bg-white/5 border border-stone-dark/40 p-3">
-                <div className="relative aspect-[4/3] w-full border border-stone-dark/30 overflow-hidden">
-                  <ImagePlaceholder className="w-full h-full" />
+              <div className="clay-card bg-white/5 border border-stone-dark/40 p-3 group">
+                <div className="relative w-full h-[320px] sm:h-[380px] border border-stone-dark/30 overflow-hidden bg-night/60">
+                  <img
+                    src="/images/tecnologia/ambiente-e-interface.webp"
+                    alt="Ambiente e interface da plataforma SIMOP"
+                    className="w-full h-auto block transition-transform duration-[4000ms] ease-in-out group-hover:-translate-y-[calc(100%-320px)] sm:group-hover:-translate-y-[calc(100%-380px)]"
+                  />
+                  <div className="absolute top-3 right-3 bg-night/90 backdrop-blur-md px-2.5 py-1 text-gold text-[10px] font-mono border border-gold/40 flex items-center gap-1.5 shadow-md pointer-events-none group-hover:opacity-20 transition-opacity duration-300">
+                    <Sparkles className="w-3 h-3 text-gold animate-pulse" />
+                    <span>Passe o mouse para rolar</span>
+                  </div>
                 </div>
                 <p className="text-[11px] text-stone-dark font-mono text-center pt-2.5">
                   Ambiente e interface da plataforma SIMOP
