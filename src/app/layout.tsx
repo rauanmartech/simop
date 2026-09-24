@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { VLibras } from "@/components/VLibras";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://simopouropreto.com.br";
 
@@ -75,6 +76,7 @@ export default function RootLayout({
         <Header />
         <main className="flex-grow">{children}</main>
         <Footer />
+        <VLibras />
       </body>
     </html>
   );
