@@ -1,16 +1,16 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 declare global {
   interface Window {
     VLibras?: {
-      Widget: new (config: {
-        rootPath: string;
+      Widget: new (config?: {
+        rootPath?: string;
         avatar?: string;
         position?: string;
         opacity?: number;
-      }) => void;
+      } | string) => void;
     };
   }
 }
@@ -24,10 +24,16 @@ declare module "react" {
 }
 
 export const VLibras: React.FC = () => {
+  const initializedRef = useRef(false);
+
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const scriptId = "vlibras-plugin-script";
 
     const initWidget = () => {
+      if (initializedRef.current) return;
+
       if (window.VLibras && typeof window.VLibras.Widget === "function") {
         try {
           new window.VLibras.Widget({
@@ -35,6 +41,7 @@ export const VLibras: React.FC = () => {
             avatar: "icaro",
             position: "R",
           });
+          initializedRef.current = true;
         } catch (error) {
           console.error("Erro ao inicializar o VLibras Widget:", error);
         }
@@ -53,23 +60,25 @@ export const VLibras: React.FC = () => {
       script.id = scriptId;
       script.src = "https://vlibras.gov.br/app/vlibras-plugin.js";
       script.async = true;
-      script.onload = initWidget;
+      script.onload = () => {
+        setTimeout(initWidget, 100);
+      };
+      script.onerror = (err) => {
+        console.error("Erro ao carregar o script do VLibras:", err);
+      };
       document.body.appendChild(script);
     } else {
-      script.addEventListener("load", initWidget);
+      const handleLoad = () => {
+        setTimeout(initWidget, 100);
+      };
+      script.addEventListener("load", handleLoad);
     }
-
-    return () => {
-      if (script) {
-        script.removeEventListener("load", initWidget);
-      }
-    };
   }, []);
 
   return (
-    <div vw="true" className="enabled">
-      <div vw-access-button="true" className="active" />
-      <div vw-plugin-wrapper="true">
+    <div vw="" className="enabled">
+      <div vw-access-button="" className="active" />
+      <div vw-plugin-wrapper="">
         <div className="vw-plugin-top-wrapper" />
       </div>
     </div>
