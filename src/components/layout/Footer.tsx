@@ -104,14 +104,24 @@ export const Footer: React.FC = () => {
                 <MapPin className="w-4 h-4 text-gold shrink-0 mt-0.5" />
                 <span>Ouro Preto, Minas Gerais — Brasil</span>
               </div>
-              <div className="flex items-center gap-2.5">
+              <a
+                href="mailto:sistemademuseusop@gmail.com"
+                className="flex items-center gap-2.5 hover:text-gold-light transition-colors"
+                title="Enviar e-mail para SiMOP"
+              >
                 <Mail className="w-4 h-4 text-gold shrink-0" />
-                <span>contato@museusdeouropreto.org.br</span>
-              </div>
-              <div className="flex items-center gap-2.5">
+                <span className="break-all">sistemademuseusop@gmail.com</span>
+              </a>
+              <a
+                href="https://wa.me/5531999551231"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2.5 hover:text-gold-light transition-colors"
+                title="Falar no WhatsApp com Stella Ker"
+              >
                 <Phone className="w-4 h-4 text-gold shrink-0" />
-                <span>(31) 3551-0000</span>
-              </div>
+                <span>(31) 99955-1231 (Stella Ker)</span>
+              </a>
             </div>
           </div>
         </div>

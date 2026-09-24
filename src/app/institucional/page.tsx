@@ -17,6 +17,9 @@ import {
   Layers,
   MapPin,
   ExternalLink,
+  Phone,
+  Mail,
+  MessageCircle,
 } from "lucide-react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 
@@ -407,6 +410,27 @@ export default function InstitucionalPage() {
                     <p className="text-sm text-blue-deep leading-relaxed">
                       Atua no suporte e acompanhamento técnico das atividades do Sistema, contribuindo com a articulação de projetos, atendimento aos museus associados e apoio executivo aos planos de ação do SiMOP.
                     </p>
+
+                    <div className="pt-2 flex flex-wrap items-center gap-3">
+                      <a
+                        href="https://wa.me/5531999551231"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-3.5 py-2 bg-emerald-800 hover:bg-emerald-700 text-white text-xs font-semibold rounded-none transition-colors shadow-sm"
+                        title="Falar no WhatsApp com Stella Ker"
+                      >
+                        <MessageCircle className="w-4 h-4" />
+                        <span>WhatsApp: (31) 99955-1231</span>
+                      </a>
+                      <a
+                        href="mailto:sistemademuseusop@gmail.com"
+                        className="inline-flex items-center gap-2 px-3.5 py-2 bg-gold hover:bg-gold-light text-night text-xs font-semibold rounded-none transition-colors shadow-sm"
+                        title="Enviar e-mail institucional"
+                      >
+                        <Mail className="w-4 h-4" />
+                        <span>sistemademuseusop@gmail.com</span>
+                      </a>
+                    </div>
                   </div>
 
                 </div>
@@ -527,6 +551,13 @@ export default function InstitucionalPage() {
                   <span>6. Marco Regulatório</span>
                   <span className="text-xs text-stone-dark">→</span>
                 </a>
+                <a
+                  href="#contatos"
+                  className="flex items-center justify-between p-2 hover:bg-ivory transition-colors text-blue-deep hover:text-gold font-medium"
+                >
+                  <span>7. Canais de Contato</span>
+                  <span className="text-xs text-stone-dark">→</span>
+                </a>
               </nav>
 
               {/* Destaque / Atalho Catálogo de Museus */}
@@ -538,6 +569,71 @@ export default function InstitucionalPage() {
                   <Landmark className="w-4 h-4" />
                   <span>Explorar Museus</span>
                 </Link>
+              </div>
+            </div>
+
+            {/* Card Lateral: Entrar em Contato */}
+            <div id="contatos" className="clay-card p-6 bg-white space-y-5 border border-stone scroll-mt-28">
+              <div className="flex items-center gap-2 text-night font-serif font-bold text-base pb-3 border-b border-stone/60">
+                <Phone className="w-4 h-4 text-gold" />
+                <span>Entrar em Contato</span>
+              </div>
+
+              <p className="text-xs text-blue-deep leading-relaxed">
+                Canais diretos de atendimento e comunicação institucional do SiMOP.
+              </p>
+
+              <div className="space-y-3">
+                {/* Botão WhatsApp */}
+                <a
+                  href="https://wa.me/5531999551231"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-3.5 bg-emerald-800/10 hover:bg-emerald-800/20 text-emerald-950 border border-emerald-700/30 transition-all group shadow-sm"
+                  title="Abrir WhatsApp para falar com Stella Ker"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-emerald-700 text-white flex items-center justify-center shrink-0 shadow-sm">
+                      <MessageCircle className="w-4 h-4" />
+                    </div>
+                    <div className="flex flex-col text-left">
+                      <span className="text-[10px] uppercase font-bold text-emerald-800 tracking-wider">
+                        WhatsApp • Stella Ker
+                      </span>
+                      <span className="text-xs font-bold text-night">
+                        (31) 99955-1231
+                      </span>
+                    </div>
+                  </div>
+                  <ExternalLink className="w-3.5 h-3.5 text-emerald-700 group-hover:translate-x-0.5 transition-transform shrink-0" />
+                </a>
+
+                {/* Botão E-mail */}
+                <a
+                  href="mailto:sistemademuseusop@gmail.com"
+                  className="flex items-center justify-between p-3.5 bg-gold/10 hover:bg-gold/20 text-night border border-gold/40 transition-all group shadow-sm"
+                  title="Enviar e-mail para SiMOP"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-8 h-8 rounded-full bg-gold text-night flex items-center justify-center shrink-0 shadow-sm">
+                      <Mail className="w-4 h-4" />
+                    </div>
+                    <div className="flex flex-col text-left min-w-0">
+                      <span className="text-[10px] uppercase font-bold text-gold-dark tracking-wider">
+                        E-mail Oficial
+                      </span>
+                      <span className="text-xs font-bold text-night truncate">
+                        sistemademuseusop@gmail.com
+                      </span>
+                    </div>
+                  </div>
+                  <ExternalLink className="w-3.5 h-3.5 text-gold-dark group-hover:translate-x-0.5 transition-transform shrink-0 ml-1" />
+                </a>
+              </div>
+
+              <div className="pt-2 text-[11px] text-stone-dark flex items-center gap-1.5 border-t border-stone/50">
+                <Sparkles className="w-3.5 h-3.5 text-gold shrink-0" />
+                <span>Atendimento executivo e suporte aos museus</span>
               </div>
             </div>
 
