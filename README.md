@@ -58,6 +58,12 @@ Construído com **Tailwind CSS**, o visual mescla componentes táteis em *Claymo
 - `ivory` (`#F7F5F0`): O marfim das paredes caiadas e papel de imprensa.
 - `stone` (`#E6E1D8`): Os tons terrosos do patrimônio mineiro.
 
+### 5. Acessibilidade Digital Nativa (VLibras)
+O portal conta com a integração do widget oficial do **VLibras** (`src/components/VLibras.tsx`), promovendo inclusão digital e tradução dinâmica de todo o conteúdo em português para a Língua Brasileira de Sinais (Libras):
+- **Disponibilidade Global:** Inserido no `layout.tsx` mestre para acesso irrestrito em todas as páginas e rotas públicas do portal;
+- **Carregamento Seguro e Oficial:** Script consumido diretamente do domínio oficial do Governo Federal (`https://vlibras.gov.br/app/vlibras-plugin.js`);
+- **Execução Otimizada:** Componente do cliente isolado com prevenção de duplicação, sem necessidade de bibliotecas terceiras de npm e compatível com SSR/hidratação no Next.js.
+
 ---
 
 ## 🗄️ Arquitetura do Banco de Dados
@@ -204,6 +210,7 @@ sistema-de-museus/
 │   │   ├── page.tsx            # Home Page com previews editoriais contemporâneos
 │   │   └── globals.css         # Tokens de design e animações customizadas
 │   ├── components/             # Arquitetura modular de componentes
+│   │   ├── VLibras.tsx         # Componente de acessibilidade (Widget oficial VLibras)
 │   │   ├── admin/              # Gerenciadores de fotos e eventos
 │   │   ├── layout/             # Header com navegação responsiva e Footer
 │   │   ├── memoria/            # Cards e componentes de acervo e cronologia
