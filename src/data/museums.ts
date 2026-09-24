@@ -83,7 +83,7 @@ export const museums: Museum[] = [
     acessibilidade: "Consulte a instituição para informações sobre recursos de acessibilidade e suporte à visitação.",
     contato: {
       telefone: "Consulte no local",
-      email: "casa.dos.contos@economia.gov.br",
+      email: "casadoscontos@gestao.gov.br",
       website: "https://www.gov.br",
       instagram: "@museucasadoscontos"
     },
