@@ -296,9 +296,8 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
           }}
         >
           <div
-            className={`transition-transform duration-200 ${
-              showCursorClickAnimation ? "scale-75" : "scale-100"
-            }`}
+            className={`transition-transform duration-200 ${showCursorClickAnimation ? "scale-75" : "scale-100"
+              }`}
           >
             <MousePointer2 className="w-7 h-7 text-gold fill-gold drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] filter" />
           </div>
@@ -327,11 +326,10 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
             {/* Toggle Narração de Voz */}
             <button
               onClick={handleToggleVoice}
-              className={`p-1.5 rounded transition-colors ${
-                isVoiceActive
-                  ? "bg-gold/20 text-gold border border-gold/40"
-                  : "text-stone-dark hover:text-night hover:bg-stone/20"
-              }`}
+              className={`p-1.5 rounded transition-colors ${isVoiceActive
+                ? "bg-gold/20 text-gold border border-gold/40"
+                : "text-stone-dark hover:text-night hover:bg-stone/20"
+                }`}
               title={isVoiceActive ? "Desativar voz" : "Ativar narração de voz"}
               aria-label="Controle de voz"
             >
