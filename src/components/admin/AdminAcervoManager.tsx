@@ -483,7 +483,7 @@ export const AdminAcervoManager: React.FC = () => {
       {/* 1. ÁREA DE SELEÇÃO E UPLOAD DE FOTOS                                     */}
       {/* ========================================================================= */}
       {queue.length === 0 && (
-        <section className="clay-card p-6 md:p-8 bg-white border border-stone space-y-6">
+        <section data-tutorial="acervo-upload-area" className="clay-card p-6 md:p-8 bg-white border border-stone space-y-6">
           <div className="flex items-center gap-2 pb-3 border-b border-stone/60">
             <Upload className="w-5 h-5 text-gold" />
             <h2 className="font-serif font-bold text-night text-lg sm:text-xl">
@@ -537,7 +537,7 @@ export const AdminAcervoManager: React.FC = () => {
       {/* 2. LISTA COMPACTA DE STATUS INDIVIDUAL DE UPLOAD                          */}
       {/* ========================================================================= */}
       {queue.length > 0 && (
-        <section className="clay-card p-6 md:p-8 bg-white border border-stone space-y-6">
+        <section data-tutorial="acervo-queue-section" className="clay-card p-6 md:p-8 bg-white border border-stone space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-stone/60">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
@@ -664,7 +664,7 @@ export const AdminAcervoManager: React.FC = () => {
                 </div>
 
                 {/* Seletor de Modo */}
-                <div className="flex items-center bg-ivory border border-stone p-1">
+                <div data-tutorial="acervo-mode-selector" className="flex items-center bg-ivory border border-stone p-1">
                   <button
                     type="button"
                     onClick={() => setEditMode("individual")}
@@ -879,6 +879,7 @@ export const AdminAcervoManager: React.FC = () => {
                 </button>
 
                 <button
+                  data-tutorial="acervo-save-all-btn"
                   type="button"
                   onClick={handleSaveAllMetadata}
                   disabled={savingMetadata || completedCount === 0}
@@ -905,8 +906,8 @@ export const AdminAcervoManager: React.FC = () => {
       {/* ========================================================================= */}
       {/* 4. LISTAGEM E GERENCIAMENTO DAS FOTOS DO ACERVO                           */}
       {/* ========================================================================= */}
-      <section className="space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone/60 pb-3">
+      <section data-tutorial="acervo-photo-grid" className="space-y-6">
+        <div data-tutorial="acervo-header" className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-stone/60 pb-3">
           <div className="flex items-center gap-2">
             <Camera className="w-5 h-5 text-gold" />
             <h2 className="font-serif font-bold text-night text-lg sm:text-xl">
@@ -1020,6 +1021,7 @@ export const AdminAcervoManager: React.FC = () => {
 
                     {/* Botão de estrela — destaque */}
                     <button
+                      data-tutorial="acervo-feature-btn"
                       onClick={() => handleToggleFeatured(photo)}
                       disabled={isFeaturing || !!featuringId || isDeletingBulk}
                       title={photo.is_featured ? "Remover destaque" : "Marcar como destaque"}
@@ -1065,6 +1067,7 @@ export const AdminAcervoManager: React.FC = () => {
 
                     <div className="pt-2 border-t border-stone/50 flex justify-end">
                       <button
+                        data-tutorial="acervo-delete-btn"
                         onClick={() => requestDeletePhoto(photo)}
                         disabled={isDeleting || isDeletingBulk}
                         className="inline-flex items-center gap-1 text-[11px] font-mono text-red-600 hover:text-red-800 hover:underline disabled:opacity-50"

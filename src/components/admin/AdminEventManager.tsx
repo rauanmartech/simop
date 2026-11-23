@@ -584,7 +584,7 @@ export const AdminEventManager: React.FC<AdminEventManagerProps> = ({
       {/* ===================================================================== */}
       {/* 1. Barra de Seleção de Edições                                        */}
       {/* ===================================================================== */}
-      <section className="clay-card p-6 bg-white border border-stone space-y-4">
+      <section data-tutorial="event-editions-list" className="clay-card p-6 bg-white border border-stone space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="space-y-1">
             <h2 className="font-serif font-bold text-night text-lg sm:text-xl flex items-center gap-2">
@@ -597,6 +597,7 @@ export const AdminEventManager: React.FC<AdminEventManagerProps> = ({
           </div>
 
           <button
+            data-tutorial="event-new-edition-btn"
             onClick={handleNewEditionClick}
             className="inline-flex items-center gap-2 px-4 py-2 bg-night text-ivory text-xs uppercase tracking-wider font-semibold hover:bg-gold hover:text-night transition-colors shrink-0"
           >
@@ -657,7 +658,7 @@ export const AdminEventManager: React.FC<AdminEventManagerProps> = ({
           )}
         </div>
 
-        <form onSubmit={handleSaveEdition} className="space-y-6">
+        <form onSubmit={handleSaveEdition} data-tutorial="event-form-fields" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Ano */}
             <div className="space-y-1.5">
@@ -691,7 +692,7 @@ export const AdminEventManager: React.FC<AdminEventManagerProps> = ({
             </div>
 
             {/* Link Externo */}
-            <div className="space-y-1.5">
+            <div data-tutorial="event-drive-field" className="space-y-1.5">
               <label className="block text-xs font-mono uppercase tracking-wider font-semibold text-night">
                 Link do Google Drive (Acervo Completo)
               </label>
@@ -748,7 +749,7 @@ export const AdminEventManager: React.FC<AdminEventManagerProps> = ({
 
             {/* Checkboxes */}
             <div className="md:col-span-3 flex flex-wrap items-center gap-8 pt-2">
-              <div className="flex items-center gap-2.5">
+              <div data-tutorial="event-is-current-toggle" className="flex items-center gap-2.5">
                 <input
                   type="checkbox"
                   id="is-current"
@@ -761,7 +762,7 @@ export const AdminEventManager: React.FC<AdminEventManagerProps> = ({
                 </label>
               </div>
 
-              <div className="flex items-center gap-2.5">
+              <div data-tutorial="event-is-published-toggle" className="flex items-center gap-2.5">
                 <input
                   type="checkbox"
                   id="is-published"
@@ -799,6 +800,7 @@ export const AdminEventManager: React.FC<AdminEventManagerProps> = ({
             )}
 
             <button
+              data-tutorial="event-save-edition-btn"
               type="submit"
               disabled={savingEdition || isDeletingEdition}
               className="inline-flex items-center gap-2 px-6 py-3 bg-night text-ivory text-xs uppercase tracking-widest font-semibold hover:bg-gold hover:text-night transition-colors disabled:opacity-50"
@@ -823,7 +825,7 @@ export const AdminEventManager: React.FC<AdminEventManagerProps> = ({
       {/* 3. Gerenciamento de Fotos                                             */}
       {/* ===================================================================== */}
       {selectedEditionId !== "new" && (
-        <section className="space-y-6">
+        <section data-tutorial="event-photos-section" className="space-y-6">
 
           {/* ----------------------------------------------------------------- */}
           {/* 3A. ÁREA DE SELEÇÃO E UPLOAD (exibida quando a fila está vazia)   */}

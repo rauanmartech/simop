@@ -12,16 +12,22 @@ import {
   Layers,
   Sparkles,
   Loader2,
+  BookOpen,
 } from "lucide-react";
 import { getSupabase } from "@/lib/supabase";
 import { AdminAcervoManager } from "@/components/admin/AdminAcervoManager";
 import { AdminEventManager } from "@/components/admin/AdminEventManager";
+import { TutorialCenter } from "@/components/admin/TutorialCenter";
+import { TutorialOverlay } from "@/components/admin/TutorialOverlay";
+import { TutorialModule } from "@/types/tutorial";
+import { TUTORIAL_MODULES } from "@/data/tutorialModules";
 
 export default function AdminDashboardPage() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<"acervo" | "semana" | "primavera">("acervo");
+  const [activeTab, setActiveTab] = useState<"acervo" | "semana" | "primavera" | "tutoriais">("acervo");
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [authChecking, setAuthChecking] = useState(true);
+  const [activeTutorial, setActiveTutorial] = useState<TutorialModule | null>(null);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -65,7 +71,7 @@ export default function AdminDashboardPage() {
   return (
     <div className="min-h-screen bg-ivory pb-24">
       {/* 0. Barra Superior Administrativa */}
-      <header className="bg-night border-b border-stone-dark/40 sticky top-0 z-40">
+      <header data-tutorial="admin-header" className="bg-night border-b border-stone-dark/40 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
@@ -82,14 +88,30 @@ export default function AdminDashboardPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3 sm:gap-4">
+              {/* Botão de Destaque: Aprender / Ver Tutoriais */}
+              <button
+                data-tutorial="admin-tutorial-btn"
+                onClick={() => setActiveTab("tutoriais")}
+                className={`inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-mono font-bold transition-all border ${
+                  activeTab === "tutoriais"
+                    ? "bg-gold text-night border-gold shadow-md"
+                    : "bg-gold/15 text-gold border-gold/40 hover:bg-gold hover:text-night"
+                }`}
+                title="Acessar Central de Tutoriais Guiados"
+              >
+                <Sparkles className="w-3.5 h-3.5 animate-spin-slow" />
+                <span>Ver Tutoriais</span>
+              </button>
+
               {userEmail && (
-                <span className="hidden sm:inline-block text-xs font-mono text-stone bg-stone-dark/20 px-3 py-1 border border-stone-dark/30">
+                <span className="hidden md:inline-block text-xs font-mono text-stone bg-stone-dark/20 px-3 py-1 border border-stone-dark/30">
                   {userEmail}
                 </span>
               )}
 
               <Link
+                data-tutorial="admin-view-portal"
                 href="/memoria-e-eventos"
                 target="_blank"
                 className="inline-flex items-center gap-1.5 text-xs text-gold hover:underline font-mono"
@@ -125,7 +147,7 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Abas de Navegação */}
-        <div className="flex flex-wrap gap-2 border-b border-stone/60 pb-px">
+        <div data-tutorial="admin-nav-tabs" className="flex flex-wrap gap-2 border-b border-stone/60 pb-px">
           <button
             onClick={() => setActiveTab("acervo")}
             className={`px-5 py-3 text-xs font-mono uppercase tracking-wider font-semibold transition-all duration-200 flex items-center gap-2 border-b-2 ${
@@ -161,6 +183,18 @@ export default function AdminDashboardPage() {
             <Calendar className="w-4 h-4 text-gold" />
             <span>Primavera de Museus</span>
           </button>
+
+          <button
+            onClick={() => setActiveTab("tutoriais")}
+            className={`px-5 py-3 text-xs font-mono uppercase tracking-wider font-semibold transition-all duration-200 flex items-center gap-2 border-b-2 ${
+              activeTab === "tutoriais"
+                ? "bg-white text-night border-gold shadow-sm"
+                : "bg-transparent text-stone-dark border-transparent hover:text-night hover:bg-white/50"
+            }`}
+          >
+            <Sparkles className="w-4 h-4 text-gold" />
+            <span>Tutoriais & Capacitação</span>
+          </button>
         </div>
 
         {/* 2. Conteúdo da Aba Ativa */}
@@ -178,8 +212,36 @@ export default function AdminDashboardPage() {
               title="Primavera de Museus"
             />
           )}
+          {activeTab === "tutoriais" && (
+            <TutorialCenter
+              onStartTutorial={(mod) => setActiveTutorial(mod)}
+              onNavigateToTab={(tab) => setActiveTab(tab)}
+            />
+          )}
         </main>
       </div>
+
+      {/* 3. Modal / Overlay de Tutorial Ativo */}
+      {activeTutorial && (
+        <TutorialOverlay
+          module={activeTutorial}
+          onChangeTab={(tab) => setActiveTab(tab)}
+          onClose={() => setActiveTutorial(null)}
+          onFinish={() => {
+            // Salvar no localStorage de concluídos
+            try {
+              const key = "simop_tutorial_completed_modules";
+              const current = JSON.parse(localStorage.getItem(key) || "[]");
+              if (!current.includes(activeTutorial.id)) {
+                localStorage.setItem(key, JSON.stringify([...current, activeTutorial.id]));
+              }
+            } catch (e) {
+              console.error(e);
+            }
+            setActiveTutorial(null);
+          }}
+        />
+      )}
     </div>
   );
 }
